@@ -20,7 +20,7 @@ public class PeliculaService {
         return repository.getPelicula(id);
     }
 
-    public Integer addPelicula(Pelicula pelicula) throws SQLException {
+    public Pelicula addPelicula(Pelicula pelicula) throws SQLException {
         return repository.addPelicula(pelicula);
     }
 
