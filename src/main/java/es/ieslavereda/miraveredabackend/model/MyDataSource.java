@@ -13,8 +13,8 @@ public class MyDataSource {
         try {
             OracleDataSource dataSource = new OracleDataSource();
             dataSource.setURL("jdbc:oracle:thin:@172.28.201.239:1521:xe");
-            dataSource.setUser("C##1DAMMARTI");
-            dataSource.setPassword("password");
+            dataSource.setUser("C##1DAWMONTESINOS");
+            dataSource.setPassword("1234");
             return dataSource;
         }
         catch(SQLException err) {

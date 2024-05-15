@@ -1,7 +1,9 @@
 package es.ieslavereda.miraveredabackend.repository;
 
+import es.ieslavereda.miraveredabackend.model.Actor;
 import es.ieslavereda.miraveredabackend.model.Genero;
-import es.ieslavereda.miraveredabackend.model.Pelicula;
+import es.ieslavereda.miraveredabackend.model.PeliculaInput;
+import es.ieslavereda.miraveredabackend.model.PeliculaOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -19,7 +21,8 @@ public class PeliculaRepository implements IPeliculaRepository {
 
 
     @Override
-    public Pelicula getPelicula(int id) throws SQLException {
+    public PeliculaOutput getPelicula(int id) throws SQLException {
+        /*
         String sql = "SELECT id FROM peliculas WHERE id_contenidoAudiovisual = " + id;
         try (Connection connection = dataSource.getConnection();
         CallableStatement callableStatement = connection.prepareCall(sql);
@@ -29,11 +32,13 @@ public class PeliculaRepository implements IPeliculaRepository {
             }
 
         }
-        return null;
+        */
+        return getAllPeliculas().stream().filter(usuario -> usuario.getId() == id).findAny().orElse(null);
     }
 
     @Override
-    public Pelicula addPelicula(Pelicula pelicula) throws SQLException {
+    public Integer addPelicula(PeliculaInput pelicula) throws SQLException {
+        /*
         String sql = "INSERT INTO peliculas (disponible_hasta,id_contenidoAudiovisual,genero,fecha_estreno,duracion,titulo,precio,descripcion,valoracion_media,nombre_director,version_idioma) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
         try (Connection conn = dataSource.getConnection();
         CallableStatement cstmt = conn.prepareCall(sql)) {
@@ -51,9 +56,12 @@ public class PeliculaRepository implements IPeliculaRepository {
             cstmt.execute();
         }
         return pelicula;
+        */
+        return null;
     }
     @Override
-    public boolean updatePelicula(Pelicula pelicula) throws SQLException {
+    public boolean updatePelicula(PeliculaInput pelicula) throws SQLException {
+        /*
         String sql="update pelicula SET disponible_hasta=?,genero=?,fecha_estreno=?,duracion=?,titulo=?,precio=?,descripcion=?,valoracion_media=?,nombre_director=?,version_idioma=? where id_contenidoAudiovisual=?" + pelicula.getId();
         try (Connection conn = dataSource.getConnection();
         CallableStatement cstmt = conn.prepareCall(sql)) {
@@ -73,22 +81,27 @@ public class PeliculaRepository implements IPeliculaRepository {
 
 
         }
+        */
         return false;
     }
     @Override
-    public Pelicula deletePelicula(int id) throws SQLException {
+    public PeliculaOutput deletePelicula(int id) throws SQLException {
+        /*
         String sql = "DELETE FROM peliculas WHERE id_contenidoAudiovisual = " + id;
-        Pelicula pelicula=getPelicula(id);
+        PeliculaOutput pelicula=getPelicula(id);
         try (Connection conn = dataSource.getConnection();
         CallableStatement cstmt = conn.prepareCall(sql)) {
             cstmt.execute();
         }
 
         return pelicula;
+        */
+        return null;
     }
     @Override
-    public List<Pelicula> getAllPeliculas() throws SQLException {
-        List<Pelicula> peliculas = new ArrayList<>();
+    public List<PeliculaOutput> getAllPeliculas() throws SQLException {
+        List<PeliculaOutput> peliculas = new ArrayList<>();
+        /*
         String sql = "SELECT * FROM peliculas";
         try(Connection con = dataSource.getConnection();
         CallableStatement cs=con.prepareCall(sql);
@@ -109,6 +122,34 @@ public class PeliculaRepository implements IPeliculaRepository {
             }
 
         }
+        */
+        peliculas.add(new PeliculaOutput(
+                1,
+                "pelicula",
+                "Test Pelicula",
+                "Esto es una prueba",
+                "ficción",
+                5400,
+                1715794525,
+                "Jaime Martí",
+                2.5,
+                1,
+                550,
+                600,
+                "V.E.",
+                List.of(
+                        new Actor(
+                                1,
+                                "Ian",
+                                "Maio Cigna"
+                        )
+                ),
+                1715994525,
+                null,
+                null,
+                null,
+                null
+        ));
         return peliculas;
     }
 }

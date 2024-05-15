@@ -1,7 +1,6 @@
 package es.ieslavereda.miraveredabackend.repository;
 
 import es.ieslavereda.miraveredabackend.model.MyDataSource;
-import es.ieslavereda.miraveredabackend.model.Pelicula;
 import es.ieslavereda.miraveredabackend.model.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -19,20 +18,27 @@ public class UsuarioRepository implements IUsuarioRepository {
 
     @Override
     public Usuario getUsuario(int id) throws SQLException {
-        String sql = "SELECT id_cliente FROM Cliente WHERE id_cliente = " + id;
-        try (Connection connection = dataSource.getConnection();
-             CallableStatement callableStatement = connection.prepareCall(sql);
-             ResultSet resultSet = callableStatement.executeQuery()) {
+        String sql = "SELECT * FROM Cliente WHERE id_cliente = " + id;
+        try(Connection connection = dataSource.getConnection()) {
+            CallableStatement callableStatement = connection.prepareCall(sql);
+            ResultSet resultSet = callableStatement.executeQuery();
+            System.out.println(sql);
             if (resultSet.next()) {
+                System.out.println("B");
                 return resultSet.getObject(1, Usuario.class);
             }
 
         }
+        catch(SQLException err) {
+            err.printStackTrace();
+        }
+        System.out.println("C");
         return null;
     }
 
     @Override
     public Usuario addUsuario(Usuario usuario) throws SQLException {
+        /*
         String sql="Insert into Cliente (id_cliente, nombre, apellido,password,email,domicilio,codigopostal,tarjeta,fechanacimiento) values (?,?,?,?,?,?,?,?,?)";
         try (Connection connection = dataSource.getConnection();
         CallableStatement callableStatement = connection.prepareCall(sql)) {
@@ -48,10 +54,13 @@ public class UsuarioRepository implements IUsuarioRepository {
             callableStatement.execute();
         }
         return usuario;
+        */
+        return null;
     }
 
     @Override
     public boolean updateUsuario(Usuario usuario) throws SQLException {
+        /*
         String sql="Update Cliente SET nombre=?,apellidos=?,password=?,email=?,domicilio=?,codigopostal=?,tarjeta=?,fechanacimiento=? WHERE id_cliente =" + usuario.getId();
         try (Connection connection = dataSource.getConnection();
         CallableStatement callableStatement = connection.prepareCall(sql)) {
@@ -65,6 +74,7 @@ public class UsuarioRepository implements IUsuarioRepository {
             callableStatement.setDate(8, (Date) usuario.getFechaNacimiento());
             callableStatement.executeUpdate();
         }
+        */
         return false;
     }
 
@@ -94,7 +104,7 @@ public class UsuarioRepository implements IUsuarioRepository {
                                 .password(rs.getString("contraseña"))
                                 .email(rs.getString("email"))
                                 .domicilio(rs.getString("domicilio"))
-                                .codigopostal(rs.getString("codigopostal"))
+                                .codigopostal(rs.getString("codigo_postal"))
                                 .fechaNacimiento(rs.getDate("fecha_nacimiento"))
                         .build());
 

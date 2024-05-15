@@ -1,8 +1,7 @@
 package es.ieslavereda.miraveredabackend.service;
 
-import es.ieslavereda.miraveredabackend.model.Pelicula;
-import es.ieslavereda.miraveredabackend.model.Pelicula;
-import es.ieslavereda.miraveredabackend.repository.PeliculaRepository;
+import es.ieslavereda.miraveredabackend.model.PeliculaInput;
+import es.ieslavereda.miraveredabackend.model.PeliculaOutput;
 import es.ieslavereda.miraveredabackend.repository.PeliculaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,21 +15,21 @@ public class PeliculaService {
     @Autowired
     private PeliculaRepository repository;
 
-    public Pelicula getPelicula(int id) throws SQLException {
+    public PeliculaOutput getPelicula(int id) throws SQLException {
         return repository.getPelicula(id);
     }
 
-    public Pelicula addPelicula(Pelicula pelicula) throws SQLException {
+    public Integer addPelicula(PeliculaInput pelicula) throws SQLException {
         return repository.addPelicula(pelicula);
     }
 
-    public boolean updatePelicula(Pelicula pelicula) throws SQLException {
+    public boolean updatePelicula(PeliculaInput pelicula) throws SQLException {
         return repository.updatePelicula(pelicula);
     }
-    public Pelicula deletePelicula(int id) throws SQLException {
+    public PeliculaOutput deletePelicula(int id) throws SQLException {
         return repository.deletePelicula(id);
     }
-    public List<Pelicula> getAllPeliculas() throws SQLException {
+    public List<PeliculaOutput> getAllPeliculas() throws SQLException {
         return repository.getAllPeliculas();
     }
 

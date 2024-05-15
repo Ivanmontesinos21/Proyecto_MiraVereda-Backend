@@ -17,9 +17,8 @@ public class Usuario {
     private String apellidos;
     private String password;
     private String email;
-    private String domicilio;
     private String codigopostal;
-    private List<Integer> tarjeta;
+    private String domicilio;
     private Date fechaNacimiento;
 
 

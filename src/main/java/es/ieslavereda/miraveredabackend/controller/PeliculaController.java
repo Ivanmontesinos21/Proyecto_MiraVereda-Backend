@@ -1,6 +1,7 @@
 package es.ieslavereda.miraveredabackend.controller;
 
-import es.ieslavereda.miraveredabackend.model.Pelicula;
+import es.ieslavereda.miraveredabackend.model.PeliculaInput;
+import es.ieslavereda.miraveredabackend.model.PeliculaOutput;
 import es.ieslavereda.miraveredabackend.service.PeliculaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ public class PeliculaController extends BaseController {
     @GetMapping("/pelicula/{id}")
     public ResponseEntity<?> getPelicula(@PathVariable("id") int id) {
         try{
-            Pelicula pelicula = service.getPelicula(id);
+            PeliculaOutput pelicula = service.getPelicula(id);
             if(pelicula==null)
                 return new ResponseEntity<>("MOVIE NOT FOUND",HttpStatus.NOT_FOUND);
             return new ResponseEntity<>(pelicula,HttpStatus.OK);
@@ -39,7 +40,7 @@ public class PeliculaController extends BaseController {
     }
 
     @PostMapping("/pelicula/")
-    public ResponseEntity<?> addPelicula(@RequestBody Pelicula pelicula) {
+    public ResponseEntity<?> addPelicula(@RequestBody PeliculaInput pelicula) {
             try {
                 LOG.log(Level.INFO,"Añadiendo Usuarios");
                 return new ResponseEntity<>(peliculaService.addPelicula(pelicula), HttpStatus.OK);
@@ -50,7 +51,7 @@ public class PeliculaController extends BaseController {
     }
 
     @PutMapping("/pelicula/")
-    public ResponseEntity<?> updatePelicula(@RequestBody Pelicula pelicula) {
+    public ResponseEntity<?> updatePelicula(@RequestBody PeliculaInput pelicula) {
         try{
             boolean success = service.updatePelicula(pelicula);
             if(!success)
@@ -67,7 +68,7 @@ public class PeliculaController extends BaseController {
     @DeleteMapping("/pelicula/{id}")
     public ResponseEntity<?> deletePelicula(@PathVariable("id") int id) {
         try{
-            Pelicula pelicula = service.deletePelicula(id);
+            PeliculaOutput pelicula = service.deletePelicula(id);
             if(pelicula==null)
                 return new ResponseEntity<>("MOVIE NOT FOUND",HttpStatus.NOT_FOUND);
             return new ResponseEntity<>(pelicula,HttpStatus.OK);
