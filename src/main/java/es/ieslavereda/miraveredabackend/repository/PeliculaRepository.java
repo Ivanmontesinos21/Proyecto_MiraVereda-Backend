@@ -20,7 +20,7 @@ public class PeliculaRepository implements IPeliculaRepository {
 
     @Override
     public Pelicula getPelicula(int id) throws SQLException {
-        String sql = "SELECT * FROM peliculas WHERE id_contenidoAudiovisual = ?";
+        String sql = "SELECT * FROM peliculas WHERE id_contenidoAudiovisual = " + id;
         try (Connection connection = dataSource.getConnection();
         CallableStatement callableStatement = connection.prepareCall(sql);
         ResultSet resultSet = callableStatement.executeQuery()) {
@@ -79,7 +79,14 @@ public class PeliculaRepository implements IPeliculaRepository {
     }
     @Override
     public Pelicula deletePelicula(int id) throws SQLException {
-        return null;
+        String sql = "DELETE FROM peliculas WHERE id_contenidoAudiovisual = " + id;
+        Pelicula pelicula=getPelicula(id);
+        try (Connection conn = dataSource.getConnection();
+        CallableStatement cstmt = conn.prepareCall(sql)) {
+            cstmt.execute();
+        }
+
+        return pelicula;
     }
     @Override
     public List<Pelicula> getAllPeliculas() throws SQLException {
