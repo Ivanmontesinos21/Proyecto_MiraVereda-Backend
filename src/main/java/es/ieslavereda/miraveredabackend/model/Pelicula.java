@@ -22,5 +22,5 @@ public class Pelicula {
     private double media;
     private String director;
     private String version_idioma;
-    private String idtarifa;
+
 }

@@ -17,7 +17,7 @@ public class UsuarioService {
         return repository.getUsuario(id);
     }
 
-    public Integer addUsuario(Usuario usuario) throws SQLException {
+    public Usuario addUsuario(Usuario usuario) throws SQLException {
         return repository.addUsuario(usuario);
     }
 

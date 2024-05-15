@@ -34,18 +34,8 @@ public class UsuarioController {
 
     @PostMapping("/usuario/")
     public ResponseEntity<?> addUsuario(@RequestBody Usuario usuario) {
-        try{
-            Integer newId = service.addUsuario(usuario);
-            if(newId==null)
-                return new ResponseEntity<>("USER ALREADY EXISTS",HttpStatus.NOT_FOUND);
-            return new ResponseEntity<>(newId,HttpStatus.OK);
 
-        }  catch (SQLException e){
-            Map<String,Object> response = new HashMap<>();
-            response.put("code",e.getErrorCode());
-            response.put(("message"),e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return null;
     }
 
     @PutMapping("/usuario/")

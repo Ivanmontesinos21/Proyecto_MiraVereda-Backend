@@ -1,6 +1,7 @@
 package es.ieslavereda.miraveredabackend.repository;
 
 import es.ieslavereda.miraveredabackend.model.MyDataSource;
+import es.ieslavereda.miraveredabackend.model.Pelicula;
 import es.ieslavereda.miraveredabackend.model.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -18,11 +19,20 @@ public class UsuarioRepository implements IUsuarioRepository {
 
     @Override
     public Usuario getUsuario(int id) throws SQLException {
+        String sql = "SELECT id_cliente FROM Cliente WHERE id_cliente = " + id;
+        try (Connection connection = dataSource.getConnection();
+             CallableStatement callableStatement = connection.prepareCall(sql);
+             ResultSet resultSet = callableStatement.executeQuery()) {
+            if (resultSet.next()) {
+                return resultSet.getObject(1, Usuario.class);
+            }
+
+        }
         return null;
     }
 
     @Override
-    public Integer addUsuario(Usuario usuario) throws SQLException {
+    public Usuario addUsuario(Usuario usuario) throws SQLException {
         return null;
     }
 
@@ -33,11 +43,31 @@ public class UsuarioRepository implements IUsuarioRepository {
 
     @Override
     public Usuario deleteUsuario(int id) throws SQLException {
-        return null;
+        Usuario usuario = getUsuario(id);
+
     }
 
     @Override
     public List<Usuario> getAllUsuarios() throws SQLException {
-        return null;
+        List<Usuario> usuarios = new ArrayList<>();
+        String sql = "SELECT * FROM usuario";
+        try (Connection con = dataSource.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery()){
+            while (rs.next()) {
+                usuarios.add(Usuario.builder()
+                                .id(rs.getInt("id_cliente"))
+                                .nombre(rs.getString("nombre"))
+                                .apellidos(rs.getString("apellidos"))
+                                .password(rs.getString("contraseña"))
+                                .email(rs.getString("email"))
+                                .domicilio(rs.getString("domicilio"))
+                                .codigopostal(rs.getString("codigopostal"))
+                                .fechaNacimiento(rs.getDate("fecha_nacimiento"))
+                        .build());
+
+            }
+        }
+        return usuarios;
     }
 }

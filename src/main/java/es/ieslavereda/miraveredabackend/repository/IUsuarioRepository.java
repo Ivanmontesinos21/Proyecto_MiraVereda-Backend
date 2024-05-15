@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface IUsuarioRepository {
     Usuario getUsuario(int id) throws SQLException;
-    Integer addUsuario(Usuario usuario) throws SQLException;
+    Usuario addUsuario(Usuario usuario) throws SQLException;
     boolean updateUsuario(Usuario usuario) throws SQLException;
     Usuario deleteUsuario(int id) throws SQLException;
     List<Usuario> getAllUsuarios() throws SQLException;

@@ -20,7 +20,7 @@ public class PeliculaRepository implements IPeliculaRepository {
 
     @Override
     public Pelicula getPelicula(int id) throws SQLException {
-        String sql = "SELECT * FROM peliculas WHERE id_contenidoAudiovisual = " + id;
+        String sql = "SELECT id FROM peliculas WHERE id_contenidoAudiovisual = " + id;
         try (Connection connection = dataSource.getConnection();
         CallableStatement callableStatement = connection.prepareCall(sql);
         ResultSet resultSet = callableStatement.executeQuery()) {
@@ -34,7 +34,7 @@ public class PeliculaRepository implements IPeliculaRepository {
 
     @Override
     public Pelicula addPelicula(Pelicula pelicula) throws SQLException {
-        String sql = "INSERT INTO peliculas (disponible_hasta,id_contenidoAudiovisual,genero,fecha_estreno,duracion,titulo,precio,descripcion,valoracion_media,nombre_director,version_idioma,id_tarifa) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO peliculas (disponible_hasta,id_contenidoAudiovisual,genero,fecha_estreno,duracion,titulo,precio,descripcion,valoracion_media,nombre_director,version_idioma) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
         try (Connection conn = dataSource.getConnection();
         CallableStatement cstmt = conn.prepareCall(sql)) {
             cstmt.setDate(1, (Date) pelicula.getDisponible_hasta());
@@ -48,14 +48,13 @@ public class PeliculaRepository implements IPeliculaRepository {
             cstmt.setDouble(9,pelicula.getMedia());
             cstmt.setString(10,pelicula.getDirector());
             cstmt.setString(11, pelicula.getVersion_idioma());
-            cstmt.setString(12,pelicula.getIdtarifa());
             cstmt.execute();
         }
         return pelicula;
     }
     @Override
     public boolean updatePelicula(Pelicula pelicula) throws SQLException {
-        String sql="update pelicula SET disponible_hasta=?,genero=?,fecha_estreno=?,duracion=?,titulo=?,precio=?,descripcion=?,valoracion_media=?,nombre_director=?,version_idioma=?,id_tarifa=? where id_contenidoAudiovisual=?" + pelicula.getId();
+        String sql="update pelicula SET disponible_hasta=?,genero=?,fecha_estreno=?,duracion=?,titulo=?,precio=?,descripcion=?,valoracion_media=?,nombre_director=?,version_idioma=? where id_contenidoAudiovisual=?" + pelicula.getId();
         try (Connection conn = dataSource.getConnection();
         CallableStatement cstmt = conn.prepareCall(sql)) {
 
@@ -70,7 +69,6 @@ public class PeliculaRepository implements IPeliculaRepository {
             cstmt.setDouble(9,pelicula.getMedia());
             cstmt.setString(10,pelicula.getDirector());
             cstmt.setString(11, pelicula.getVersion_idioma());
-            cstmt.setString(12,pelicula.getIdtarifa());
             cstmt.executeUpdate();
 
 
@@ -107,7 +105,6 @@ public class PeliculaRepository implements IPeliculaRepository {
                                 .media(rs.getDouble("valoracion_media"))
                                 .director(rs.getString("nombre_director"))
                                 .version_idioma(rs.getString("version_idioma"))
-                                .idtarifa(rs.getString("id_tarifa"))
                         .build());
             }
 
