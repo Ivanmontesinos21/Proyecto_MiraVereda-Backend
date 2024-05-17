@@ -150,6 +150,33 @@ public class PeliculaRepository implements IPeliculaRepository {
                 null,
                 null
         ));
+        peliculas.add(new PeliculaOutput(
+                2,
+                "pelicula2",
+                "Test Pelicula2",
+                "Esto es una prueba2",
+                "ficción",
+                500,
+                1715525,
+                "Jaime Martí2",
+                2.5,
+                1,
+                550,
+                600,
+                "V.E.",
+                List.of(
+                        new Actor(
+                                1,
+                                "Ian2",
+                                "Maio Cigna2"
+                        )
+                ),
+                1715994525,
+                null,
+                null,
+                null,
+                null
+        ));
         return peliculas;
     }
 }
