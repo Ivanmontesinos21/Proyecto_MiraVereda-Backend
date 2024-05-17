@@ -1,8 +1,10 @@
 package es.ieslavereda.miraveredabackend.model;
 
 import lombok.*;
+import oracle.jdbc.internal.OracleTimestamp;
 import oracle.sql.DATE;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -17,8 +19,8 @@ public class Usuario {
     private String apellidos;
     private String password;
     private String email;
-    private String codigopostal;
     private String domicilio;
+    private String codigopostal;
     private Date fechaNacimiento;
 
 

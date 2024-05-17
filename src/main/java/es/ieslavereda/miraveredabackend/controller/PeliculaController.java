@@ -4,6 +4,7 @@ import es.ieslavereda.miraveredabackend.model.PeliculaInput;
 import es.ieslavereda.miraveredabackend.model.PeliculaOutput;
 import es.ieslavereda.miraveredabackend.service.PeliculaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,16 +27,18 @@ public class PeliculaController extends BaseController {
 
     @GetMapping("/pelicula/{id}")
     public ResponseEntity<?> getPelicula(@PathVariable("id") int id) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Access-Control-Allow-Origin", "*");
         try{
             PeliculaOutput pelicula = service.getPelicula(id);
             if(pelicula==null)
-                return new ResponseEntity<>("MOVIE NOT FOUND",HttpStatus.NOT_FOUND);
-            return new ResponseEntity<>(pelicula,HttpStatus.OK);
+                return new ResponseEntity<>("MOVIE NOT FOUND",headers,HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(pelicula,headers,HttpStatus.OK);
         }  catch (SQLException e){
             Map<String,Object> response = new HashMap<>();
             response.put("code",e.getErrorCode());
             response.put(("message"),e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response, headers,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

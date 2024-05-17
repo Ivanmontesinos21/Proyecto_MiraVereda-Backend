@@ -18,14 +18,24 @@ public class UsuarioRepository implements IUsuarioRepository {
 
     @Override
     public Usuario getUsuario(int id) throws SQLException {
-        String sql = "SELECT * FROM Cliente WHERE id_cliente = " + id;
+        String sql = "SELECT * FROM Cliente WHERE id_cliente = ?";
         try(Connection connection = dataSource.getConnection()) {
-            CallableStatement callableStatement = connection.prepareCall(sql);
-            ResultSet resultSet = callableStatement.executeQuery();
+            PreparedStatement st = connection.prepareCall(sql);
+            st.setInt(1, id);
+            ResultSet resultSet = st.executeQuery();
             System.out.println(sql);
             if (resultSet.next()) {
                 System.out.println("B");
-                return resultSet.getObject(1, Usuario.class);
+                return new Usuario(
+                        id,
+                        resultSet.getString("nombre"),
+                        resultSet.getString("apellidos"),
+                        resultSet.getString("contrasenya"),
+                        resultSet.getString("email"),
+                        resultSet.getString("domicilio"),
+                        resultSet.getString("codigo_postal"),
+                        resultSet.getDate("fecha_nacimiento")
+                );
             }
 
         }
@@ -38,10 +48,9 @@ public class UsuarioRepository implements IUsuarioRepository {
 
     @Override
     public Usuario addUsuario(Usuario usuario) throws SQLException {
-        /*
         String sql="Insert into Cliente (id_cliente, nombre, apellido,password,email,domicilio,codigopostal,tarjeta,fechanacimiento) values (?,?,?,?,?,?,?,?,?)";
-        try (Connection connection = dataSource.getConnection();
-        CallableStatement callableStatement = connection.prepareCall(sql)) {
+        try (Connection connection = dataSource.getConnection()) {
+            CallableStatement callableStatement = connection.prepareCall(sql);
             callableStatement.setInt(1, usuario.getId());
             callableStatement.setString(2, usuario.getNombre());
             callableStatement.setString(3, usuario.getApellidos());
@@ -49,13 +58,10 @@ public class UsuarioRepository implements IUsuarioRepository {
             callableStatement.setString(5, usuario.getEmail());
             callableStatement.setString(6, usuario.getDomicilio());
             callableStatement.setString(7, usuario.getCodigopostal());
-            callableStatement.setObject(8, usuario.getTarjeta());
             callableStatement.setDate(9, (Date) usuario.getFechaNacimiento());
             callableStatement.execute();
         }
         return usuario;
-        */
-        return null;
     }
 
     @Override
