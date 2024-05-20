@@ -6,12 +6,12 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class UsuarioInput {
-    Integer id;
-    String nombre;
-    String apellidos;
-    String email;
-    long fechaNacimiento;
-    String contrasenya;
-    String domicilio;
-    String codigoPostal;
+    private Integer id;
+    private String nombre;
+    private String apellidos;
+    private String email;
+    private long fechaNacimiento;
+    private String contrasenya;
+    private String domicilio;
+    private String codigoPostal;
 }

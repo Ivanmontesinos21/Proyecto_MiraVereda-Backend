@@ -1,14 +1,12 @@
 package es.ieslavereda.miraveredabackend.repository;
 
 import es.ieslavereda.miraveredabackend.model.Actor;
-import es.ieslavereda.miraveredabackend.model.Genero;
 import es.ieslavereda.miraveredabackend.model.PeliculaInput;
-import es.ieslavereda.miraveredabackend.model.PeliculaOutput;
+import es.ieslavereda.miraveredabackend.model.ContenidoAudiovisualOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.io.UnsupportedEncodingException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +19,7 @@ public class PeliculaRepository implements IPeliculaRepository {
 
 
     @Override
-    public PeliculaOutput getPelicula(int id) throws SQLException {
+    public ContenidoAudiovisualOutput getPelicula(int id) throws SQLException {
         /*
         String sql = "SELECT id FROM peliculas WHERE id_contenidoAudiovisual = " + id;
         try (Connection connection = dataSource.getConnection();
@@ -85,7 +83,7 @@ public class PeliculaRepository implements IPeliculaRepository {
         return false;
     }
     @Override
-    public PeliculaOutput deletePelicula(int id) throws SQLException {
+    public ContenidoAudiovisualOutput deletePelicula(int id) throws SQLException {
         /*
         String sql = "DELETE FROM peliculas WHERE id_contenidoAudiovisual = " + id;
         PeliculaOutput pelicula=getPelicula(id);
@@ -99,8 +97,8 @@ public class PeliculaRepository implements IPeliculaRepository {
         return null;
     }
     @Override
-    public List<PeliculaOutput> getAllPeliculas() throws SQLException {
-        List<PeliculaOutput> peliculas = new ArrayList<>();
+    public List<ContenidoAudiovisualOutput> getAllPeliculas() throws SQLException {
+        List<ContenidoAudiovisualOutput> peliculas = new ArrayList<>();
         /*
         String sql = "SELECT * FROM peliculas";
         try(Connection con = dataSource.getConnection();
@@ -123,9 +121,9 @@ public class PeliculaRepository implements IPeliculaRepository {
 
         }
         */
-        peliculas.add(new PeliculaOutput(
+        peliculas.add(new ContenidoAudiovisualOutput(
                 1,
-                "pelicula",
+                "corto",
                 "Test Pelicula",
                 "Esto es una prueba",
                 "ficción",
@@ -139,20 +137,15 @@ public class PeliculaRepository implements IPeliculaRepository {
                 "V.E.",
                 List.of(
                         new Actor(
-                                1,
+                                "1",
                                 "Ian",
                                 "Maio Cigna"
                         )
-                ),
-                1715994525,
-                null,
-                null,
-                null,
-                null
+                )
         ));
-        peliculas.add(new PeliculaOutput(
+        peliculas.add(new ContenidoAudiovisualOutput(
                 2,
-                "pelicula2",
+                "corto",
                 "Test Pelicula2",
                 "Esto es una prueba2",
                 "ficción",
@@ -166,16 +159,11 @@ public class PeliculaRepository implements IPeliculaRepository {
                 "V.E.",
                 List.of(
                         new Actor(
-                                1,
+                                "1",
                                 "Ian2",
                                 "Maio Cigna2"
                         )
-                ),
-                1715994525,
-                null,
-                null,
-                null,
-                null
+                )
         ));
         return peliculas;
     }

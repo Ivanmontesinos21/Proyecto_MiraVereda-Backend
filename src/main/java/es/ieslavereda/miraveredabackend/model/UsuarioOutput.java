@@ -8,12 +8,12 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class UsuarioOutput {
-    int id;
-    String nombre;
-    String apellido;
-    String email;
-    long fechaNacimiento;
-    String domicilio;
-    String codigoPostal;
-    List<Tarjeta> tarjetas;
+    private int id;
+    private String nombre;
+    private String apellido;
+    private String email;
+    private long fechaNacimiento;
+    private String domicilio;
+    private String codigoPostal;
+    private List<Tarjeta> tarjetas;
 }

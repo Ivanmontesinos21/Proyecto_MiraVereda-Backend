@@ -1,7 +1,7 @@
 package es.ieslavereda.miraveredabackend.controller;
 
 import es.ieslavereda.miraveredabackend.model.PeliculaInput;
-import es.ieslavereda.miraveredabackend.model.PeliculaOutput;
+import es.ieslavereda.miraveredabackend.model.ContenidoAudiovisualOutput;
 import es.ieslavereda.miraveredabackend.service.PeliculaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -30,7 +30,7 @@ public class PeliculaController extends BaseController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Access-Control-Allow-Origin", "*");
         try{
-            PeliculaOutput pelicula = service.getPelicula(id);
+            ContenidoAudiovisualOutput pelicula = service.getPelicula(id);
             if(pelicula==null)
                 return new ResponseEntity<>("MOVIE NOT FOUND",headers,HttpStatus.NOT_FOUND);
             return new ResponseEntity<>(pelicula,headers,HttpStatus.OK);
@@ -71,7 +71,7 @@ public class PeliculaController extends BaseController {
     @DeleteMapping("/pelicula/{id}")
     public ResponseEntity<?> deletePelicula(@PathVariable("id") int id) {
         try{
-            PeliculaOutput pelicula = service.deletePelicula(id);
+            ContenidoAudiovisualOutput pelicula = service.deletePelicula(id);
             if(pelicula==null)
                 return new ResponseEntity<>("MOVIE NOT FOUND",HttpStatus.NOT_FOUND);
             return new ResponseEntity<>(pelicula,HttpStatus.OK);
