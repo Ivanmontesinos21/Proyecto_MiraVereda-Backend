@@ -1,6 +1,6 @@
 package es.ieslavereda.miraveredabackend.controller;
 
-import es.ieslavereda.miraveredabackend.model.Usuario;
+import es.ieslavereda.miraveredabackend.model.*;
 import es.ieslavereda.miraveredabackend.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -23,7 +23,7 @@ public class UsuarioController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Access-Control-Allow-Origin", "*");
         try{
-            Usuario usuario = service.getUsuario(id);
+            UsuarioOutput usuario = service.getUsuario(id);
             if(usuario==null)
                 return new ResponseEntity<>("USER NOT FOUND",headers,HttpStatus.NOT_FOUND);
             return new ResponseEntity<>(usuario,headers,HttpStatus.OK);
@@ -36,38 +36,63 @@ public class UsuarioController {
     }
 
     @PostMapping("/usuario/")
-    public ResponseEntity<?> addUsuario(@RequestBody Usuario usuario) {
-
-        return null;
+    public ResponseEntity<?> addUsuario(@RequestBody UsuarioInput usuarioInput) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Access-Control-Allow-Origin", "*");
+        try{
+            UsuarioOutput usuario = service.addUsuario(usuarioInput);
+            if(usuario == null)
+                return new ResponseEntity<>("USER NOT FOUND", headers, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(usuario, headers, HttpStatus.OK);
+        }
+        catch (SQLException e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", e.getErrorCode());
+            response.put("message", e.getMessage());
+            return new ResponseEntity<>(response, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        catch (EmailUsedException e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", e.getMessage());
+            return new ResponseEntity<>(response, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/usuario/")
-    public ResponseEntity<?> updateUsuario(@RequestBody Usuario usuario) {
+    public ResponseEntity<?> updateUsuario(@RequestBody UsuarioInput usuarioInput) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Access-Control-Allow-Origin", "*");
         try{
-            boolean success = service.updateUsuario(usuario);
-            if(!success)
-                return new ResponseEntity<>("USER NOT FOUND",HttpStatus.NOT_FOUND);
-            return new ResponseEntity<>("",HttpStatus.OK);
-        }  catch (SQLException e){
+            service.updateUsuario(usuarioInput);
+            return new ResponseEntity<>("", headers, HttpStatus.OK);
+        }
+        catch (SQLException e){
             Map<String,Object> response = new HashMap<>();
-            response.put("code",e.getErrorCode());
-            response.put(("message"),e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            response.put("code", e.getErrorCode());
+            response.put("message", e.getMessage());
+            return new ResponseEntity<>(response, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        catch (EmailUsedException e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", e.getMessage());
+            return new ResponseEntity<>(response, headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @DeleteMapping("/usuario/{id}")
     public ResponseEntity<?> deleteUsuario(@PathVariable("id") int id) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Access-Control-Allow-Origin", "*");
         try{
-            Usuario usuario = service.deleteUsuario(id);
+            UsuarioOutput usuario = service.deleteUsuario(id);
             if(usuario==null)
-                return new ResponseEntity<>("USER NOT FOUND",HttpStatus.NOT_FOUND);
-            return new ResponseEntity<>(usuario,HttpStatus.OK);
+                return new ResponseEntity<>("USER NOT FOUND", headers, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(usuario, headers, HttpStatus.OK);
         }  catch (SQLException e){
             Map<String,Object> response = new HashMap<>();
-            response.put("code",e.getErrorCode());
-            response.put(("message"),e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            response.put("code", e.getErrorCode());
+            response.put("message", e.getMessage());
+            return new ResponseEntity<>(response, headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -78,8 +103,26 @@ public class UsuarioController {
         }  catch (SQLException e){
             Map<String,Object> response = new HashMap<>();
             response.put("code",e.getErrorCode());
-            response.put(("message"),e.getMessage());
+            response.put("message", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/login/")
+    public ResponseEntity<?> login(@RequestBody Credenciales credenciales) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Access-Control-Allow-Origin", "*");
+        try{
+            UsuarioOutput usuario = service.login(credenciales.getEmail(), credenciales.getContrasenya());
+            if(usuario == null)
+                return new ResponseEntity<>("USER NOT FOUND", headers, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(usuario, headers, HttpStatus.OK);
+        }
+        catch (SQLException e){
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", e.getErrorCode());
+            response.put("message", e.getMessage());
+            return new ResponseEntity<>(response, headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

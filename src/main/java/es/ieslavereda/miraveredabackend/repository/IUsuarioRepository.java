@@ -1,14 +1,18 @@
 package es.ieslavereda.miraveredabackend.repository;
 
+import es.ieslavereda.miraveredabackend.model.EmailUsedException;
 import es.ieslavereda.miraveredabackend.model.Usuario;
+import es.ieslavereda.miraveredabackend.model.UsuarioInput;
+import es.ieslavereda.miraveredabackend.model.UsuarioOutput;
+
 import java.sql.SQLException;
 import java.util.List;
 
 public interface IUsuarioRepository {
-    Usuario getUsuario(int id) throws SQLException;
-    Usuario addUsuario(Usuario usuario) throws SQLException;
-    boolean updateUsuario(Usuario usuario) throws SQLException;
-    Usuario deleteUsuario(int id) throws SQLException;
-    List<Usuario> getAllUsuarios() throws SQLException;
-
+    UsuarioOutput getUsuario(int id) throws SQLException;
+    UsuarioOutput addUsuario(UsuarioInput usuarioInput) throws SQLException, EmailUsedException;
+    void updateUsuario(UsuarioInput usuarioInput) throws SQLException, EmailUsedException;
+    UsuarioOutput deleteUsuario(int id) throws SQLException;
+    List<UsuarioOutput> getAllUsuarios() throws SQLException;
+    UsuarioOutput login(String email, String contrasenya) throws SQLException;
 }
