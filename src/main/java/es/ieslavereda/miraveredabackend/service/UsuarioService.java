@@ -1,9 +1,6 @@
 package es.ieslavereda.miraveredabackend.service;
 
-import es.ieslavereda.miraveredabackend.model.EmailUsedException;
-import es.ieslavereda.miraveredabackend.model.Usuario;
-import es.ieslavereda.miraveredabackend.model.UsuarioInput;
-import es.ieslavereda.miraveredabackend.model.UsuarioOutput;
+import es.ieslavereda.miraveredabackend.model.*;
 import es.ieslavereda.miraveredabackend.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,5 +33,9 @@ public class UsuarioService {
 
     public UsuarioOutput login(String email, String contrasenya) throws SQLException {
         return repository.login(email, contrasenya);
+    }
+
+    public boolean resetPass(Credenciales credenciales) throws SQLException {
+        return repository.resetPass(credenciales);
     }
 }

@@ -124,4 +124,16 @@ public class UsuarioRepository implements IUsuarioRepository {
         }
         return null;
     }
+
+    @Override
+    public boolean resetPass(Credenciales credenciales) throws SQLException {
+        String sql = "UPDATE CLIENTE SET contrasenya = ? WHERE email = ?";
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement st = connection.prepareCall(sql);
+            st.setString(1, credenciales.getContrasenya());
+            st.setString(2, credenciales.getEmail());
+            st.execute();
+            return st.getUpdateCount() == 1;
+        }
+    }
 }

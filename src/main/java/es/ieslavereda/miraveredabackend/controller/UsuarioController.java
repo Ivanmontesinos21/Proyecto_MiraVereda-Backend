@@ -121,4 +121,21 @@ public class UsuarioController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @CrossOrigin(origins = "*")
+    @PutMapping("/resetpass/")
+    public ResponseEntity<?> resetPass(@RequestBody Credenciales credenciales) {
+        try{
+            boolean success = service.resetPass(credenciales);
+            if(!success)
+                return new ResponseEntity<>("USER NOT FOUND", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("", HttpStatus.OK);
+        }
+        catch (SQLException e){
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", e.getErrorCode());
+            response.put("message", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
