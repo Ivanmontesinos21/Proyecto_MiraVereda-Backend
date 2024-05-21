@@ -52,10 +52,4 @@ public class ContenidoAudiovisual {
         ca.idTarifa = resultSet.getInt("id_tarifa");
         return ca;
     }
-
-    public ContenidoAudiovisualOutput toCAOutput(ResultSet rsActores) throws SQLException {
-        ContenidoAudiovisualOutput caOutput = new ContenidoAudiovisualOutput();
-        caOutput.fromCA(this, rsActores);
-        return caOutput;
-    }
 }

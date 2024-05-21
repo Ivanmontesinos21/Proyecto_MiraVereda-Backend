@@ -9,11 +9,4 @@ public class Capitulo extends ContenidoAudiovisual {
     String serie;
     Date disponibleDesde;
     int temporada;
-
-    @Override
-    public ContenidoAudiovisualOutput toCAOutput(ResultSet rsActores) throws SQLException {
-        CapituloOutput capituloOutput = new CapituloOutput();
-        capituloOutput.fromCA(this, rsActores);
-        return capituloOutput;
-    }
 }

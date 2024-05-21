@@ -18,84 +18,81 @@ public class UsuarioController {
     @Autowired
     private UsuarioService service;
 
+    @CrossOrigin(origins = "*")
     @GetMapping("/usuario/{id}")
-    public ResponseEntity<?> getUsuario(@PathVariable("id") int id) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Access-Control-Allow-Origin", "*");
+    public ResponseEntity<?> getUsuario(@PathVariable int id) {
         try{
             UsuarioOutput usuario = service.getUsuario(id);
             if(usuario==null)
-                return new ResponseEntity<>("USER NOT FOUND",headers,HttpStatus.NOT_FOUND);
-            return new ResponseEntity<>(usuario,headers,HttpStatus.OK);
+                return new ResponseEntity<>("USER NOT FOUND",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(usuario,HttpStatus.OK);
         }  catch (SQLException e){
             Map<String,Object> response = new HashMap<>();
             response.put("code",e.getErrorCode());
             response.put(("message"),e.getMessage());
-            return new ResponseEntity<>(response, headers,HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    @CrossOrigin(origins = "*")
     @PostMapping("/usuario/")
     public ResponseEntity<?> addUsuario(@RequestBody UsuarioInput usuarioInput) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Access-Control-Allow-Origin", "*");
         try{
             UsuarioOutput usuario = service.addUsuario(usuarioInput);
             if(usuario == null)
-                return new ResponseEntity<>("USER NOT FOUND", headers, HttpStatus.NOT_FOUND);
-            return new ResponseEntity<>(usuario, headers, HttpStatus.OK);
+                return new ResponseEntity<>("USER NOT FOUND", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(usuario, HttpStatus.OK);
         }
         catch (SQLException e) {
             Map<String, Object> response = new HashMap<>();
             response.put("code", e.getErrorCode());
             response.put("message", e.getMessage());
-            return new ResponseEntity<>(response, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         catch (EmailUsedException e) {
             Map<String, Object> response = new HashMap<>();
             response.put("message", e.getMessage());
-            return new ResponseEntity<>(response, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    @CrossOrigin(origins = "*")
     @PutMapping("/usuario/")
     public ResponseEntity<?> updateUsuario(@RequestBody UsuarioInput usuarioInput) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Access-Control-Allow-Origin", "*");
         try{
             service.updateUsuario(usuarioInput);
-            return new ResponseEntity<>("", headers, HttpStatus.OK);
+            return new ResponseEntity<>("", HttpStatus.OK);
         }
         catch (SQLException e){
             Map<String,Object> response = new HashMap<>();
             response.put("code", e.getErrorCode());
             response.put("message", e.getMessage());
-            return new ResponseEntity<>(response, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         catch (EmailUsedException e) {
             Map<String, Object> response = new HashMap<>();
             response.put("message", e.getMessage());
-            return new ResponseEntity<>(response, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    @CrossOrigin(origins = "*")
     @DeleteMapping("/usuario/{id}")
-    public ResponseEntity<?> deleteUsuario(@PathVariable("id") int id) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Access-Control-Allow-Origin", "*");
+    public ResponseEntity<?> deleteUsuario(@PathVariable int id) {
         try{
             UsuarioOutput usuario = service.deleteUsuario(id);
             if(usuario==null)
-                return new ResponseEntity<>("USER NOT FOUND", headers, HttpStatus.NOT_FOUND);
-            return new ResponseEntity<>(usuario, headers, HttpStatus.OK);
+                return new ResponseEntity<>("USER NOT FOUND", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(usuario, HttpStatus.OK);
         }  catch (SQLException e){
             Map<String,Object> response = new HashMap<>();
             response.put("code", e.getErrorCode());
             response.put("message", e.getMessage());
-            return new ResponseEntity<>(response, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    @CrossOrigin(origins = "*")
     @GetMapping("/usuario/")
     public ResponseEntity<?> getAllUsuarios() {
         try{
@@ -108,21 +105,20 @@ public class UsuarioController {
         }
     }
 
+    @CrossOrigin(origins = "*")
     @PostMapping("/login/")
     public ResponseEntity<?> login(@RequestBody Credenciales credenciales) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Access-Control-Allow-Origin", "*");
         try{
             UsuarioOutput usuario = service.login(credenciales.getEmail(), credenciales.getContrasenya());
             if(usuario == null)
-                return new ResponseEntity<>("USER NOT FOUND", headers, HttpStatus.NOT_FOUND);
-            return new ResponseEntity<>(usuario, headers, HttpStatus.OK);
+                return new ResponseEntity<>("USER NOT FOUND", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(usuario, HttpStatus.OK);
         }
         catch (SQLException e){
             Map<String, Object> response = new HashMap<>();
             response.put("code", e.getErrorCode());
             response.put("message", e.getMessage());
-            return new ResponseEntity<>(response, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

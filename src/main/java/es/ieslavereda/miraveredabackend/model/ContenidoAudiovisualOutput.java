@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 public class ContenidoAudiovisualOutput {
     private int id;
     private String tipo;
@@ -25,8 +23,13 @@ public class ContenidoAudiovisualOutput {
     private int precioConTarifa;
     private String versionIdioma;
     private List<Actor> actores;
+    private Long disponibleHasta;
+    private Integer idSerie;
+    private String serie;
+    private Long disponibleDesde;
+    Integer temporada;
 
-    public void fromCA(ContenidoAudiovisual ca, ResultSet rsActores) throws SQLException {
+    public ContenidoAudiovisualOutput(ContenidoAudiovisual ca, ResultSet rsActores) throws SQLException {
         id = ca.id;
         tipo = ca.tipo;
         titulo = ca.titulo;
@@ -41,8 +44,20 @@ public class ContenidoAudiovisualOutput {
         precioConTarifa = ca.precioConTarifa;
         versionIdioma = ca.versionIdioma;
         actores = new ArrayList<>();
-        while(rsActores.next()) {
-            actores.add(Actor.fromResultSet(rsActores));
+        if(rsActores != null) {
+            while(rsActores.next()) {
+                actores.add(Actor.fromResultSet(rsActores));
+            }
+        }
+        if(ca instanceof Pelicula) {
+            disponibleHasta = ((Pelicula)ca).disponibleHasta.getTime() / 1000;
+        }
+        else if(ca instanceof Capitulo) {
+            Capitulo capitulo = (Capitulo)ca;
+            idSerie = capitulo.idSerie;
+            serie = capitulo.serie;
+            disponibleDesde = capitulo.disponibleDesde.getTime() / 1000;
+            temporada = capitulo.temporada;
         }
     }
 }

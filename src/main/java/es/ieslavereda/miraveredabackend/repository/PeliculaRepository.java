@@ -1,8 +1,7 @@
 package es.ieslavereda.miraveredabackend.repository;
 
-import es.ieslavereda.miraveredabackend.model.Actor;
-import es.ieslavereda.miraveredabackend.model.PeliculaInput;
-import es.ieslavereda.miraveredabackend.model.ContenidoAudiovisualOutput;
+import es.ieslavereda.miraveredabackend.model.*;
+import oracle.jdbc.OracleCallableStatement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +9,8 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 public class PeliculaRepository implements IPeliculaRepository {
@@ -20,45 +21,67 @@ public class PeliculaRepository implements IPeliculaRepository {
 
     @Override
     public ContenidoAudiovisualOutput getPelicula(int id) throws SQLException {
-        /*
-        String sql = "SELECT id FROM peliculas WHERE id_contenidoAudiovisual = " + id;
-        try (Connection connection = dataSource.getConnection();
-        CallableStatement callableStatement = connection.prepareCall(sql);
-        ResultSet resultSet = callableStatement.executeQuery()) {
-            if (resultSet.next()) {
-                return resultSet.getObject(1, Pelicula.class);
+        String sql = "{ call get_pelicula(?, ?, ?) }";
+        try(Connection connection = dataSource.getConnection()) {
+            CallableStatement st = connection.prepareCall(sql);
+            st.setInt(1, id);
+            st.registerOutParameter(2, Types.REF_CURSOR);
+            st.registerOutParameter(3, Types.REF_CURSOR);
+            st.execute();
+            ResultSet rsUsuario = ((OracleCallableStatement)st).getCursor(3);
+            if(rsUsuario.next()) {
+                ResultSet rsActores = ((OracleCallableStatement)st).getCursor(2);
+                return new ContenidoAudiovisualOutput(ContenidoAudiovisual.fromResultSet(rsUsuario), rsActores);
             }
-
         }
-        */
-        return getAllPeliculas().stream().filter(usuario -> usuario.getId() == id).findAny().orElse(null);
+        return null;
     }
 
     @Override
-    public Integer addPelicula(PeliculaInput pelicula) throws SQLException {
-        /*
-        String sql = "INSERT INTO peliculas (disponible_hasta,id_contenidoAudiovisual,genero,fecha_estreno,duracion,titulo,precio,descripcion,valoracion_media,nombre_director,version_idioma) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
-        try (Connection conn = dataSource.getConnection();
-        CallableStatement cstmt = conn.prepareCall(sql)) {
-            cstmt.setDate(1, (Date) pelicula.getDisponible_hasta());
-            cstmt.setInt(2,pelicula.getId());
-            cstmt.setObject(3,pelicula.getGenero());
-            cstmt.setDate(4,(Date) pelicula.getFechaestreno());
-            cstmt.setInt(5,pelicula.getDuracion());
-            cstmt.setString(6,pelicula.getTitulo());
-            cstmt.setDouble(7,pelicula.getPrecio());
-            cstmt.setString(8,pelicula.getDescripcion());
-            cstmt.setDouble(9,pelicula.getMedia());
-            cstmt.setString(10,pelicula.getDirector());
-            cstmt.setString(11, pelicula.getVersion_idioma());
-            cstmt.execute();
+    public ContenidoAudiovisualOutput addPelicula(ContenidoAudiovisualInput pelicula) throws SQLException {
+        String sql = "{ call crear_pelicula(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) }";
+        try(Connection connection = dataSource.getConnection()) {
+            CallableStatement st = connection.prepareCall(sql);
+            String tipo = pelicula.getTipo();
+            st.setString(1, tipo);
+            st.setString(2, pelicula.getGenero());
+            st.setDate(3, new Date(pelicula.getFechaEstreno() * 1000));
+            st.setInt(4, pelicula.getDuracion());
+            st.setString(5, pelicula.getTitulo());
+            st.setInt(6, pelicula.getPrecio());
+            st.setString(7, pelicula.getDescripcion());
+            st.setString(8, pelicula.getNombreDirector());
+            st.setString(9, pelicula.getVersionIdioma());
+            st.setInt(10, pelicula.getIdTarifa());
+            st.setNull(11, Types.DATE);
+            st.setNull(12, Types.DATE);
+            st.setNull(13, Types.INTEGER);
+            st.setNull(14, Types.INTEGER);
+            if(tipo.equals("pelicula"))
+                st.setDate(11, new Date(pelicula.getDisponibleHasta() * 1000));
+            else if(tipo.equals("capitulo")) {
+                st.setDate(12, new Date(pelicula.getDisponibleDesde() * 1000));
+                st.setInt(13, pelicula.getIdSerie());
+                st.setInt(14, pelicula.getTemporada());
+            }
+            Set<Integer> actores = pelicula.getIdActores();
+            if(actores == null || actores.isEmpty())
+                st.setString(15, "");
+            else
+                st.setString(15, actores.stream().map(id -> id.toString()).collect(Collectors.joining(",")) + ',');
+            st.registerOutParameter(16, Types.REF_CURSOR);
+            st.registerOutParameter(17, Types.REF_CURSOR);
+            st.execute();
+            ResultSet rsUsuario = ((OracleCallableStatement)st).getCursor(17);
+            if(rsUsuario.next()) {
+                ResultSet rsActores = ((OracleCallableStatement)st).getCursor(16);
+                return new ContenidoAudiovisualOutput(ContenidoAudiovisual.fromResultSet(rsUsuario), rsActores);
+            }
         }
-        return pelicula;
-        */
         return null;
     }
     @Override
-    public boolean updatePelicula(PeliculaInput pelicula) throws SQLException {
+    public boolean updatePelicula(ContenidoAudiovisualInput pelicula) throws SQLException {
         /*
         String sql="update pelicula SET disponible_hasta=?,genero=?,fecha_estreno=?,duracion=?,titulo=?,precio=?,descripcion=?,valoracion_media=?,nombre_director=?,version_idioma=? where id_contenidoAudiovisual=?" + pelicula.getId();
         try (Connection conn = dataSource.getConnection();
@@ -84,87 +107,34 @@ public class PeliculaRepository implements IPeliculaRepository {
     }
     @Override
     public ContenidoAudiovisualOutput deletePelicula(int id) throws SQLException {
-        /*
-        String sql = "DELETE FROM peliculas WHERE id_contenidoAudiovisual = " + id;
-        PeliculaOutput pelicula=getPelicula(id);
-        try (Connection conn = dataSource.getConnection();
-        CallableStatement cstmt = conn.prepareCall(sql)) {
-            cstmt.execute();
+        String sql = "DELETE FROM CONTENIDO_AUDIOVISUAL WHERE ID_CA = ?";
+        ContenidoAudiovisualOutput ca = getPelicula(id);
+        if(ca == null)
+            return null;
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement st = connection.prepareCall(sql);
+            st.setInt(1, id);
+            st.execute();
+            return ca;
         }
-
-        return pelicula;
-        */
-        return null;
     }
     @Override
-    public List<ContenidoAudiovisualOutput> getAllPeliculas() throws SQLException {
+    public List<ContenidoAudiovisualOutput> getAllPeliculas(Integer afterId) throws SQLException {
         List<ContenidoAudiovisualOutput> peliculas = new ArrayList<>();
-        /*
-        String sql = "SELECT * FROM peliculas";
-        try(Connection con = dataSource.getConnection();
-        CallableStatement cs=con.prepareCall(sql);
-        ResultSet rs=cs.executeQuery()) {
-            while (rs.next()){
-                peliculas.add(Pelicula.builder().id(rs.getInt("id_contenidoAudiovisual"))
-                                .disponible_hasta(rs.getDate("disponible_hasta"))
-                                .genero(rs.getObject("genero", Genero.class))
-                                .fechaestreno(rs.getDate("fecha_estreno"))
-                                .duracion(rs.getInt("duracion"))
-                                .titulo(rs.getString("titulo"))
-                                .precio(rs.getDouble("precio"))
-                                .descripcion(rs.getString("descripcion"))
-                                .media(rs.getDouble("valoracion_media"))
-                                .director(rs.getString("nombre_director"))
-                                .version_idioma(rs.getString("version_idioma"))
-                        .build());
+        String sql = "{ ? = call get_peliculas(?) }";
+        try(Connection connection = dataSource.getConnection()) {
+            CallableStatement st = connection.prepareCall(sql);
+            if(afterId != null)
+                st.setInt(2, afterId);
+            else
+                st.setNull(2, Types.INTEGER);
+            st.registerOutParameter(1, Types.REF_CURSOR);
+            st.execute();
+            ResultSet rs = ((OracleCallableStatement)st).getCursor(1);
+            while(rs.next()) {
+                peliculas.add(new ContenidoAudiovisualOutput(ContenidoAudiovisual.fromResultSet(rs), null));
             }
-
         }
-        */
-        peliculas.add(new ContenidoAudiovisualOutput(
-                1,
-                "corto",
-                "Test Pelicula",
-                "Esto es una prueba",
-                "ficción",
-                5400,
-                1715794525,
-                "Jaime Martí",
-                2.5,
-                1,
-                550,
-                600,
-                "V.E.",
-                List.of(
-                        new Actor(
-                                "1",
-                                "Ian",
-                                "Maio Cigna"
-                        )
-                )
-        ));
-        peliculas.add(new ContenidoAudiovisualOutput(
-                2,
-                "corto",
-                "Test Pelicula2",
-                "Esto es una prueba2",
-                "ficción",
-                500,
-                1715525,
-                "Jaime Martí2",
-                2.5,
-                1,
-                550,
-                600,
-                "V.E.",
-                List.of(
-                        new Actor(
-                                "1",
-                                "Ian2",
-                                "Maio Cigna2"
-                        )
-                )
-        ));
         return peliculas;
     }
 }
