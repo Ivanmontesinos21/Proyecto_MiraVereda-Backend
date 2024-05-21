@@ -18,6 +18,7 @@ public class ContenidoAudiovisual {
     String nombreDirector;
     String versionIdioma;
     int idTarifa;
+    String imagenUrl;
 
     public static ContenidoAudiovisual fromResultSet(ResultSet resultSet) throws SQLException {
         String tipo = resultSet.getString("tipo");
@@ -50,6 +51,7 @@ public class ContenidoAudiovisual {
         ca.nombreDirector = resultSet.getString("nombre_director");
         ca.versionIdioma = resultSet.getString("version_idioma");
         ca.idTarifa = resultSet.getInt("id_tarifa");
+        ca.imagenUrl = resultSet.getString("imagen_url");
         return ca;
     }
 }

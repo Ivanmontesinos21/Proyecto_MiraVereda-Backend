@@ -39,7 +39,7 @@ public class PeliculaRepository implements IPeliculaRepository {
 
     @Override
     public ContenidoAudiovisualOutput addPelicula(ContenidoAudiovisualInput pelicula) throws SQLException {
-        String sql = "{ call crear_pelicula(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) }";
+        String sql = "{ call crear_pelicula(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) }";
         try(Connection connection = dataSource.getConnection()) {
             CallableStatement st = connection.prepareCall(sql);
             String tipo = pelicula.getTipo();
@@ -53,28 +53,29 @@ public class PeliculaRepository implements IPeliculaRepository {
             st.setString(8, pelicula.getNombreDirector());
             st.setString(9, pelicula.getVersionIdioma());
             st.setInt(10, pelicula.getIdTarifa());
-            st.setNull(11, Types.DATE);
+            st.setString(11, pelicula.getImagenUrl());
             st.setNull(12, Types.DATE);
-            st.setNull(13, Types.INTEGER);
+            st.setNull(13, Types.DATE);
             st.setNull(14, Types.INTEGER);
+            st.setNull(15, Types.INTEGER);
             if(tipo.equals("pelicula"))
-                st.setDate(11, new Date(pelicula.getDisponibleHasta() * 1000));
+                st.setDate(12, new Date(pelicula.getDisponibleHasta() * 1000));
             else if(tipo.equals("capitulo")) {
-                st.setDate(12, new Date(pelicula.getDisponibleDesde() * 1000));
-                st.setInt(13, pelicula.getIdSerie());
-                st.setInt(14, pelicula.getTemporada());
+                st.setDate(13, new Date(pelicula.getDisponibleDesde() * 1000));
+                st.setInt(14, pelicula.getIdSerie());
+                st.setInt(15, pelicula.getTemporada());
             }
             Set<Integer> actores = pelicula.getIdActores();
             if(actores == null || actores.isEmpty())
-                st.setString(15, "");
+                st.setString(16, "");
             else
-                st.setString(15, actores.stream().map(id -> id.toString()).collect(Collectors.joining(",")) + ',');
-            st.registerOutParameter(16, Types.REF_CURSOR);
+                st.setString(16, actores.stream().map(id -> id.toString()).collect(Collectors.joining(",")) + ',');
             st.registerOutParameter(17, Types.REF_CURSOR);
+            st.registerOutParameter(18, Types.REF_CURSOR);
             st.execute();
-            ResultSet rsUsuario = ((OracleCallableStatement)st).getCursor(17);
+            ResultSet rsUsuario = ((OracleCallableStatement)st).getCursor(18);
             if(rsUsuario.next()) {
-                ResultSet rsActores = ((OracleCallableStatement)st).getCursor(16);
+                ResultSet rsActores = ((OracleCallableStatement)st).getCursor(17);
                 return new ContenidoAudiovisualOutput(ContenidoAudiovisual.fromResultSet(rsUsuario), rsActores);
             }
         }

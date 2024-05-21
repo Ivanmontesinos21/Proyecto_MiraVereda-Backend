@@ -9,6 +9,7 @@ CREATE OR REPLACE PROCEDURE crear_pelicula (
 	nombre_director_input VARCHAR2,
 	version_idioma VARCHAR2,
 	id_tarifa_input INTEGER,
+    imagen_url_input VARCHAR2,
 	disponible_hasta_input DATE,
 	disponible_desde_input DATE,
 	codigo_serie_input INTEGER,
@@ -21,7 +22,7 @@ IS
 BEGIN
 	DECLARE
 		nueva_id_pelicula INTEGER;
-	BEGIN 
+	BEGIN
 		nueva_id_pelicula := ca_sequence.nextval;
 		INSERT INTO CONTENIDO_AUDIOVISUAL VALUES (
 			nueva_id_pelicula,
@@ -35,6 +36,7 @@ BEGIN
 			nombre_director_input,
 			version_idioma,
 			id_tarifa_input,
+            imagen_url_input,
 			(SELECT CURRENT_TIMESTAMP FROM DUAL)
 		);
 		IF tipo_input = 'pelicula' THEN

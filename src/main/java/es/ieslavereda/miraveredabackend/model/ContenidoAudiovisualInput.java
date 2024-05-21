@@ -19,6 +19,7 @@ public class ContenidoAudiovisualInput {
     private long fechaEstreno;
     private String nombreDirector;
     private int idTarifa;
+    private String imagenUrl;
     private int precio;
     private String versionIdioma;
     private Set<Integer> idActores;

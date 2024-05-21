@@ -19,6 +19,7 @@ public class ContenidoAudiovisualOutput {
     private String nombreDirector;
     private double valoracionMedia;
     private int idTarifa;
+    private String imagenUrl;
     private int precio;
     private int precioConTarifa;
     private String versionIdioma;
@@ -40,6 +41,7 @@ public class ContenidoAudiovisualOutput {
         nombreDirector = ca.nombreDirector;
         valoracionMedia = ca.valoracionMedia;
         idTarifa = ca.idTarifa;
+        imagenUrl = ca.imagenUrl;
         precio = ca.precio;
         precioConTarifa = ca.precioConTarifa;
         versionIdioma = ca.versionIdioma;
