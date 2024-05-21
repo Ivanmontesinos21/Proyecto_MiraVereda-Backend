@@ -10,7 +10,7 @@ import java.util.List;
 public class UsuarioOutput {
     private int id;
     private String nombre;
-    private String apellido;
+    private String apellidos;
     private String email;
     private long fechaNacimiento;
     private String domicilio;

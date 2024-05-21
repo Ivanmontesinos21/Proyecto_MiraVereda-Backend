@@ -21,8 +21,8 @@ public class UsuarioService {
         return repository.addUsuario(usuario);
     }
 
-    public void updateUsuario(UsuarioInput usuario) throws SQLException, EmailUsedException {
-        repository.updateUsuario(usuario);
+    public boolean updateUsuario(UsuarioInput usuario) throws SQLException, EmailUsedException {
+        return repository.updateUsuario(usuario);
     }
     public UsuarioOutput deleteUsuario(int id) throws SQLException {
         return repository.deleteUsuario(id);

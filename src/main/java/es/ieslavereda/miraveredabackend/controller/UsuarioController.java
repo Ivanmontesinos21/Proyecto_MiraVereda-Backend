@@ -60,7 +60,9 @@ public class UsuarioController {
     @PutMapping("/usuario/")
     public ResponseEntity<?> updateUsuario(@RequestBody UsuarioInput usuarioInput) {
         try{
-            service.updateUsuario(usuarioInput);
+            boolean success = service.updateUsuario(usuarioInput);
+            if(!success)
+                return new ResponseEntity<>("USER NOT FOUND", HttpStatus.NOT_FOUND);
             return new ResponseEntity<>("", HttpStatus.OK);
         }
         catch (SQLException e){

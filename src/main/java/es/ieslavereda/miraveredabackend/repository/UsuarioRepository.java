@@ -57,7 +57,7 @@ public class UsuarioRepository implements IUsuarioRepository {
     }
 
     @Override
-    public void updateUsuario(UsuarioInput usuarioInput) throws SQLException, EmailUsedException {
+    public boolean updateUsuario(UsuarioInput usuarioInput) throws SQLException, EmailUsedException {
         Usuario usuario = Usuario.fromUsuarioInput(usuarioInput);
         String sql = "{ ? = call actualizar_usuario(?, ?, ?, ?, ?, ?, ?, ?) }";
         try(Connection connection = dataSource.getConnection()) {
@@ -75,6 +75,7 @@ public class UsuarioRepository implements IUsuarioRepository {
             boolean emailLibre = st.getBoolean(1);
             if(!emailLibre)
                 throw new EmailUsedException();
+            return st.getUpdateCount() == 1;
         }
     }
 
