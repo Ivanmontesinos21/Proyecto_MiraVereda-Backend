@@ -54,17 +54,22 @@ public class PeliculaRepository implements IPeliculaRepository {
             st.setString(9, pelicula.getVersionIdioma());
             st.setInt(10, pelicula.getIdTarifa());
             st.setString(11, pelicula.getImagenUrl());
-            st.setNull(12, Types.DATE);
-            st.setNull(13, Types.DATE);
-            st.setNull(14, Types.INTEGER);
-            st.setNull(15, Types.INTEGER);
-            if(tipo.equals("pelicula"))
+            if(pelicula.getDisponibleHasta() != null)
                 st.setDate(12, new Date(pelicula.getDisponibleHasta() * 1000));
-            else if(tipo.equals("capitulo")) {
+            else
+                st.setNull(12, Types.DATE);
+            if(pelicula.getDisponibleDesde() != null)
                 st.setDate(13, new Date(pelicula.getDisponibleDesde() * 1000));
+            else
+                st.setNull(13, Types.DATE);
+            if(pelicula.getIdSerie() != null)
                 st.setInt(14, pelicula.getIdSerie());
+            else
+                st.setNull(14, Types.INTEGER);
+            if(pelicula.getTemporada() != null)
                 st.setInt(15, pelicula.getTemporada());
-            }
+            else
+                st.setNull(15, Types.INTEGER);
             Set<Integer> actores = pelicula.getIdActores();
             if(actores == null || actores.isEmpty())
                 st.setString(16, "");
@@ -83,28 +88,45 @@ public class PeliculaRepository implements IPeliculaRepository {
     }
     @Override
     public boolean updatePelicula(ContenidoAudiovisualInput pelicula) throws SQLException {
-        /*
-        String sql="update pelicula SET disponible_hasta=?,genero=?,fecha_estreno=?,duracion=?,titulo=?,precio=?,descripcion=?,valoracion_media=?,nombre_director=?,version_idioma=? where id_contenidoAudiovisual=?" + pelicula.getId();
-        try (Connection conn = dataSource.getConnection();
-        CallableStatement cstmt = conn.prepareCall(sql)) {
-
-            cstmt.setDate(1, (Date) pelicula.getDisponible_hasta());
-            cstmt.setInt(2,pelicula.getId());
-            cstmt.setObject(3,pelicula.getGenero());
-            cstmt.setDate(4,(Date) pelicula.getFechaestreno());
-            cstmt.setInt(5,pelicula.getDuracion());
-            cstmt.setString(6,pelicula.getTitulo());
-            cstmt.setDouble(7,pelicula.getPrecio());
-            cstmt.setString(8,pelicula.getDescripcion());
-            cstmt.setDouble(9,pelicula.getMedia());
-            cstmt.setString(10,pelicula.getDirector());
-            cstmt.setString(11, pelicula.getVersion_idioma());
-            cstmt.executeUpdate();
-
-
+        String sql = "{ ? = call actualizar_pelicula(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) }";
+        try(Connection connection = dataSource.getConnection()) {
+            CallableStatement st = connection.prepareCall(sql);
+            st.setInt(2, pelicula.getId());
+            st.setString(3, pelicula.getGenero());
+            st.setDate(4, new Date(pelicula.getFechaEstreno() * 1000));
+            st.setInt(5, pelicula.getDuracion());
+            st.setString(6, pelicula.getTitulo());
+            st.setInt(7, pelicula.getPrecio());
+            st.setString(8, pelicula.getDescripcion());
+            st.setString(9, pelicula.getNombreDirector());
+            st.setString(10, pelicula.getVersionIdioma());
+            st.setInt(11, pelicula.getIdTarifa());
+            st.setString(12, pelicula.getImagenUrl());
+            if(pelicula.getDisponibleHasta() != null)
+                st.setDate(13, new Date(pelicula.getDisponibleHasta() * 1000));
+            else
+                st.setNull(13, Types.DATE);
+            if(pelicula.getDisponibleDesde() != null)
+                st.setDate(14, new Date(pelicula.getDisponibleDesde() * 1000));
+            else
+                st.setNull(14, Types.DATE);
+            if(pelicula.getIdSerie() != null)
+                st.setInt(15, pelicula.getIdSerie());
+            else
+                st.setNull(15, Types.INTEGER);
+            if(pelicula.getTemporada() != null)
+                st.setInt(16, pelicula.getTemporada());
+            else
+                st.setNull(16, Types.INTEGER);
+            Set<Integer> actores = pelicula.getIdActores();
+            if(actores == null || actores.isEmpty())
+                st.setString(17, "");
+            else
+                st.setString(17, actores.stream().map(id -> id.toString()).collect(Collectors.joining(",")) + ',');
+            st.registerOutParameter(1, Types.BOOLEAN);
+            st.execute();
+            return st.getBoolean(1);
         }
-        */
-        return false;
     }
     @Override
     public ContenidoAudiovisualOutput deletePelicula(int id) throws SQLException {

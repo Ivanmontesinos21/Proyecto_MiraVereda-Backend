@@ -59,7 +59,7 @@ public class UsuarioRepository implements IUsuarioRepository {
     @Override
     public boolean updateUsuario(UsuarioInput usuarioInput) throws SQLException, EmailUsedException {
         Usuario usuario = Usuario.fromUsuarioInput(usuarioInput);
-        String sql = "{ ? = call actualizar_usuario(?, ?, ?, ?, ?, ?, ?, ?) }";
+        String sql = "{ ? = call actualizar_usuario(?, ?, ?, ?, ?, ?, ?, ?, ?) }";
         try(Connection connection = dataSource.getConnection()) {
             CallableStatement st = connection.prepareCall(sql);
             st.setInt(2, usuario.getId());
@@ -71,11 +71,12 @@ public class UsuarioRepository implements IUsuarioRepository {
             st.setString(8, usuario.getCodigoPostal());
             st.setDate(9, usuario.getFechaNacimiento());
             st.registerOutParameter(1, Types.BOOLEAN);
+            st.registerOutParameter(10, Types.BOOLEAN);
             st.execute();
-            boolean emailLibre = st.getBoolean(1);
+            boolean emailLibre = st.getBoolean(10);
             if(!emailLibre)
                 throw new EmailUsedException();
-            return st.getUpdateCount() == 1;
+            return st.getBoolean(1);
         }
     }
 

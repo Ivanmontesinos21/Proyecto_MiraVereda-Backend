@@ -23,8 +23,8 @@ public class ContenidoAudiovisualInput {
     private int precio;
     private String versionIdioma;
     private Set<Integer> idActores;
-    private Integer disponibleHasta;
-    private Integer disponibleDesde;
+    private Long disponibleHasta;
+    private Long disponibleDesde;
     private Integer idSerie;
     private Integer temporada;
 
