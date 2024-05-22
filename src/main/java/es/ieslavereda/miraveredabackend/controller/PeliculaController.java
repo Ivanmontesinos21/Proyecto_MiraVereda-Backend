@@ -1,9 +1,6 @@
 package es.ieslavereda.miraveredabackend.controller;
 
-import es.ieslavereda.miraveredabackend.model.ContenidoAudiovisualInput;
-import es.ieslavereda.miraveredabackend.model.ContenidoAudiovisualOutput;
-import es.ieslavereda.miraveredabackend.model.Credenciales;
-import es.ieslavereda.miraveredabackend.model.OperacionCarrito;
+import es.ieslavereda.miraveredabackend.model.*;
 import es.ieslavereda.miraveredabackend.service.PeliculaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -45,8 +42,10 @@ public class PeliculaController extends BaseController {
             try {
                 return new ResponseEntity<>(peliculaService.addPelicula(pelicula), HttpStatus.OK);
             }catch (SQLException e) {
-                e.printStackTrace();
-                return new ResponseEntity<>("Error al añadir pelicula", HttpStatus.INTERNAL_SERVER_ERROR);
+                Map<String,Object> response = new HashMap<>();
+                response.put("code", e.getErrorCode());
+                response.put("message", e.getMessage());
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
     }
@@ -61,8 +60,8 @@ public class PeliculaController extends BaseController {
             return new ResponseEntity<>("",HttpStatus.OK);
         }  catch (SQLException e){
             Map<String,Object> response = new HashMap<>();
-            response.put("code",e.getErrorCode());
-            response.put(("message"),e.getMessage());
+            response.put("code", e.getErrorCode());
+            response.put("message", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -140,6 +139,20 @@ public class PeliculaController extends BaseController {
     public ResponseEntity<?> pagar(@RequestBody Credenciales credenciales) {
         try{
             return new ResponseEntity<>(service.pagar(credenciales), HttpStatus.OK);
+        }  catch (SQLException e){
+            Map<String,Object> response = new HashMap<>();
+            response.put("code", e.getErrorCode());
+            response.put("message", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/actor/")
+    public ResponseEntity<?> addActor(@RequestBody Actor actor) {
+        try{
+            service.addActor(actor);
+            return new ResponseEntity<>("", HttpStatus.OK);
         }  catch (SQLException e){
             Map<String,Object> response = new HashMap<>();
             response.put("code", e.getErrorCode());

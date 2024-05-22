@@ -1,9 +1,6 @@
 package es.ieslavereda.miraveredabackend.service;
 
-import es.ieslavereda.miraveredabackend.model.ContenidoAudiovisualInput;
-import es.ieslavereda.miraveredabackend.model.ContenidoAudiovisualOutput;
-import es.ieslavereda.miraveredabackend.model.Credenciales;
-import es.ieslavereda.miraveredabackend.model.OperacionCarrito;
+import es.ieslavereda.miraveredabackend.model.*;
 import es.ieslavereda.miraveredabackend.repository.PeliculaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,5 +46,9 @@ public class PeliculaService {
 
     public int pagar(Credenciales credenciales) throws SQLException {
         return repository.pagar(credenciales);
+    }
+
+    public void addActor(Actor actor) throws SQLException {
+        repository.addActor(actor);
     }
 }

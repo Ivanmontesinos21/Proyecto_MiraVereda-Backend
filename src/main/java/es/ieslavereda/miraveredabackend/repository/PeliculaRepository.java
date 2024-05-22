@@ -223,4 +223,16 @@ public class PeliculaRepository implements IPeliculaRepository {
             return st.getInt(1);
         }
     }
+
+    @Override
+    public void addActor(Actor actor) throws SQLException {
+        String sql = "INSERT INTO ACTOR VALUES (?, ?, ?, (SELECT CURRENT_TIMESTAMP FROM DUAL))";
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement st = connection.prepareCall(sql);
+            st.setString(1, actor.getDni());
+            st.setString(2, actor.getNombre());
+            st.setString(3, actor.getApellidos());
+            st.execute();
+        }
+    }
 }
