@@ -13,8 +13,7 @@ Inserta el id_Cliente
 */
 
 
-declare
-    function anyadir_Carito(email_input varchar2, password_input varchar2, id_contenido integer)
+CREATE or replace function anyadir_carrito(email_input varchar2, password_input varchar2, id_contenido integer)
     return integer
     is begin
         declare 
@@ -24,18 +23,16 @@ declare
 	        	id_contenido,
 	        	(SELECT id_cliente FROM CLIENTE WHERE email = email_input AND contrasenya = password_input),
 	        	0,
-	        	0,
 	        	NULL,
-	        	(SELECT CURRENT_TIMESTAMP FROM DUAL)
+	        	NULL,
+	        	(SELECT CURRENT_TIMESTAMP FROM DUAL),
+	        	1
 	        );
 	        SELECT sum(ca.precio)into precio_carrito FROM CLIENTE c join Alquila a
 	        	on c.id_cliente=a.id_cliente join CONTENIDO_AUDIOVISUAL ca
 	            on ca.id_ca=a.id_conteaudiovi
 	            WHERE c.email = email_input AND c.contrasenya = password_input
-	            and a.cobrado=0 and a.facturado=0; 
+	            and a.en_carrito = 1; 
             return precio_carrito;
         end;
     END;
-begin
-    null;
-end;
