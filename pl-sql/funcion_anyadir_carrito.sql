@@ -17,22 +17,32 @@ CREATE or replace function anyadir_carrito(email_input varchar2, password_input 
     return integer
     is begin
         declare 
+            id_cliente_input integer;
             precio_carrito integer := 0;
+            alquila_count integer := 0;
         BEGIN
-	        INSERT INTO ALQUILA VALUES (
-	        	id_contenido,
-	        	(SELECT id_cliente FROM CLIENTE WHERE email = email_input AND contrasenya = password_input),
-	        	0,
-	        	NULL,
-	        	NULL,
-	        	(SELECT CURRENT_TIMESTAMP FROM DUAL),
-	        	1
-	        );
-	        SELECT sum(ca.precio)into precio_carrito FROM CLIENTE c join Alquila a
-	        	on c.id_cliente=a.id_cliente join CONTENIDO_AUDIOVISUAL ca
-	            on ca.id_ca=a.id_conteaudiovi
-	            WHERE c.email = email_input AND c.contrasenya = password_input
-	            and a.en_carrito = 1; 
+            SELECT id_cliente INTO id_cliente_input FROM CLIENTE WHERE email = email_input AND contrasenya = password_input;
+            SELECT COUNT(*) INTO alquila_count FROM ALQUILA WHERE id_conteaudiovi = id_contenido AND id_cliente = id_cliente_input;
+            IF alquila_count = 0 THEN
+                INSERT INTO ALQUILA VALUES (
+                    id_contenido,
+                    id_cliente_input,
+                    0,
+                    NULL,
+                    NULL,
+                    (SELECT CURRENT_TIMESTAMP FROM DUAL),
+                    1
+                );
+            ELSE
+                UPDATE ALQUILA
+                    SET en_carrito = 1
+                    WHERE id_conteaudiovi = id_contenido AND id_cliente = id_cliente_input;
+            END IF;
+            SELECT sum(ca.precio)into precio_carrito FROM CLIENTE c join Alquila a
+                on c.id_cliente=a.id_cliente join CONTENIDO_AUDIOVISUAL ca
+                on ca.id_ca=a.id_conteaudiovi
+                WHERE c.email = email_input AND c.contrasenya = password_input
+                and a.en_carrito = 1; 
             return precio_carrito;
         end;
     END;

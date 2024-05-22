@@ -160,4 +160,50 @@ public class PeliculaRepository implements IPeliculaRepository {
         }
         return peliculas;
     }
+
+    @Override
+    public List<ContenidoAudiovisualOutput> getCarrito(Credenciales credenciales) throws SQLException {
+        List<ContenidoAudiovisualOutput> peliculas = new ArrayList<>();
+        String sql = "{ ? = call get_carrito(?, ?) }";
+        try(Connection connection = dataSource.getConnection()) {
+            CallableStatement st = connection.prepareCall(sql);
+            st.setString(2, credenciales.getEmail());
+            st.setString(3, credenciales.getContrasenya());
+            st.registerOutParameter(1, Types.REF_CURSOR);
+            st.execute();
+            ResultSet rs = ((OracleCallableStatement)st).getCursor(1);
+            while(rs.next()) {
+                peliculas.add(new ContenidoAudiovisualOutput(ContenidoAudiovisual.fromResultSet(rs), null));
+            }
+        }
+        return peliculas;
+    }
+
+    @Override
+    public int addCarrito(OperacionCarrito op) throws SQLException {
+        String sql = "{ ? = call anyadir_carrito(?, ?, ?) }";
+        try(Connection connection = dataSource.getConnection()) {
+            CallableStatement st = connection.prepareCall(sql);
+            st.setString(2, op.getEmail());
+            st.setString(3, op.getContrasenya());
+            st.setInt(4, op.getIdPelicula());
+            st.registerOutParameter(1, Types.INTEGER);
+            st.execute();
+            return st.getInt(1);
+        }
+    }
+
+    @Override
+    public int deleteCarrito(OperacionCarrito op) throws SQLException {
+        String sql = "{ ? = call quitar_carrito(?, ?, ?) }";
+        try(Connection connection = dataSource.getConnection()) {
+            CallableStatement st = connection.prepareCall(sql);
+            st.setString(2, op.getEmail());
+            st.setString(3, op.getContrasenya());
+            st.setInt(4, op.getIdPelicula());
+            st.registerOutParameter(1, Types.INTEGER);
+            st.execute();
+            return st.getInt(1);
+        }
+    }
 }

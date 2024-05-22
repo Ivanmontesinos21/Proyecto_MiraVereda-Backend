@@ -2,6 +2,8 @@ package es.ieslavereda.miraveredabackend.controller;
 
 import es.ieslavereda.miraveredabackend.model.ContenidoAudiovisualInput;
 import es.ieslavereda.miraveredabackend.model.ContenidoAudiovisualOutput;
+import es.ieslavereda.miraveredabackend.model.Credenciales;
+import es.ieslavereda.miraveredabackend.model.OperacionCarrito;
 import es.ieslavereda.miraveredabackend.service.PeliculaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -86,6 +88,45 @@ public class PeliculaController extends BaseController {
     public ResponseEntity<?> getAllPeliculas(@RequestParam(value = "after", required = false) Integer afterId) {
         try{
             return new ResponseEntity<>(service.getAllPeliculas(afterId), HttpStatus.OK);
+        }  catch (SQLException e){
+            Map<String,Object> response = new HashMap<>();
+            response.put("code", e.getErrorCode());
+            response.put("message", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/carrito/ver/")
+    public ResponseEntity<?> getCarrito(@RequestBody Credenciales credenciales) {
+        try{
+            return new ResponseEntity<>(service.getCarrito(credenciales), HttpStatus.OK);
+        }  catch (SQLException e){
+            Map<String,Object> response = new HashMap<>();
+            response.put("code", e.getErrorCode());
+            response.put("message", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/carrito/")
+    public ResponseEntity<?> addCarrito(@RequestBody OperacionCarrito op) {
+        try{
+            return new ResponseEntity<>(service.addCarrito(op), HttpStatus.OK);
+        }  catch (SQLException e){
+            Map<String,Object> response = new HashMap<>();
+            response.put("code", e.getErrorCode());
+            response.put("message", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @CrossOrigin(origins = "*")
+    @DeleteMapping("/carrito/")
+    public ResponseEntity<?> deleteCarrito(@RequestBody OperacionCarrito op) {
+        try{
+            return new ResponseEntity<>(service.deleteCarrito(op), HttpStatus.OK);
         }  catch (SQLException e){
             Map<String,Object> response = new HashMap<>();
             response.put("code", e.getErrorCode());
