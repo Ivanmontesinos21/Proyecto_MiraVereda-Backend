@@ -134,4 +134,17 @@ public class PeliculaController extends BaseController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/pagar/")
+    public ResponseEntity<?> pagar(@RequestBody Credenciales credenciales) {
+        try{
+            return new ResponseEntity<>(service.pagar(credenciales), HttpStatus.OK);
+        }  catch (SQLException e){
+            Map<String,Object> response = new HashMap<>();
+            response.put("code", e.getErrorCode());
+            response.put("message", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

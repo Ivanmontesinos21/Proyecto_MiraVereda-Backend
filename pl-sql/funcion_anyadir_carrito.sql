@@ -38,11 +38,13 @@ CREATE or replace function anyadir_carrito(email_input varchar2, password_input 
                     SET en_carrito = 1
                     WHERE id_conteaudiovi = id_contenido AND id_cliente = id_cliente_input;
             END IF;
-            SELECT sum(ca.precio)into precio_carrito FROM CLIENTE c join Alquila a
+            SELECT sum(ca.precio + NVL(t.increment_tarifa, 0))into precio_carrito FROM CLIENTE c join Alquila a
                 on c.id_cliente=a.id_cliente join CONTENIDO_AUDIOVISUAL ca
                 on ca.id_ca=a.id_conteaudiovi
+                join tarifa t on ca.id_tarifa = t.id_tarifa
                 WHERE c.email = email_input AND c.contrasenya = password_input
                 and a.en_carrito = 1; 
             return precio_carrito;
         end;
     END;
+

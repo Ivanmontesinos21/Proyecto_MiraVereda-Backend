@@ -17,4 +17,5 @@ public interface IPeliculaRepository {
     List<ContenidoAudiovisualOutput> getCarrito(Credenciales credenciales) throws SQLException;
     int addCarrito(OperacionCarrito op) throws SQLException;
     int deleteCarrito(OperacionCarrito op) throws SQLException;
+    int pagar(Credenciales credenciales) throws SQLException;
 }

@@ -46,4 +46,8 @@ public class PeliculaService {
     public int deleteCarrito(OperacionCarrito op) throws SQLException {
         return repository.deleteCarrito(op);
     }
+
+    public int pagar(Credenciales credenciales) throws SQLException {
+        return repository.pagar(credenciales);
+    }
 }
