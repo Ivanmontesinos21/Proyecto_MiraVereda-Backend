@@ -6,13 +6,15 @@ CREATE OR REPLACE FUNCTION actualizar_usuario (
     email_input VARCHAR2,
     domicilio_input VARCHAR2,
     codigo_postal_input VARCHAR2,
-    fecha_nacimiento_input DATE
+    fecha_nacimiento_input DATE,
+    email_libre OUT BOOLEAN
 )
 RETURN BOOLEAN
 IS
 BEGIN
     DECLARE
         clientes_con_email INTEGER;
+        success BOOLEAN := FALSE;
     BEGIN
         SELECT COUNT(*) INTO clientes_con_email FROM CLIENTE WHERE email = email_input AND id_cliente <> id_input;
         IF clientes_con_email = 0 THEN
@@ -36,9 +38,11 @@ BEGIN
                     fecha_nacimiento = fecha_nacimiento_input
                     WHERE id_cliente = id_input;
             END IF;
-            RETURN TRUE;
+            success := SQL%ROWCOUNT = 1;
+            email_libre := TRUE;
         ELSE
-            RETURN FALSE;
+            email_libre := FALSE;
         END IF;
+        RETURN success;
     END;
 END;
