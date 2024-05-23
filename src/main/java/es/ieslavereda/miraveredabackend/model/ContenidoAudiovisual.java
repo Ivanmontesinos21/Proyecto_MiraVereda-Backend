@@ -4,6 +4,13 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Clase del ConteidoAudiovisual
+ * @Version 1.0 2024/05/23
+ * @Author David,Ian,Jaime,Ivan
+ */
+
+
 public class ContenidoAudiovisual {
     Integer id;
     String tipo;
@@ -19,6 +26,13 @@ public class ContenidoAudiovisual {
     String versionIdioma;
     int idTarifa;
     String imagenUrl;
+
+    /**
+     * Metodo que sirve para convertir de un ResultSet a un ContenidoAudioVisual
+     * @param resultSet resultset que enviaremos
+     * @return devolvera toda la informacion del ContenidoAudioVisual
+     * @throws SQLException enviará una exepcion en el caso de que no pueda añadir los parametros
+     */
 
     public static ContenidoAudiovisual fromResultSet(ResultSet resultSet) throws SQLException {
         String tipo = resultSet.getString("tipo");

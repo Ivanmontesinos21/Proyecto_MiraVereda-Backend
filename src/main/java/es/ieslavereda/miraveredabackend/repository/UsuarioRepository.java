@@ -10,10 +10,23 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Repositorio donde se maneja toda la informacion del Cliente
+ * @Version 1.0 2024/05/23
+ * @Author David,Ian,Jaime,Ivan
+ */
+
 @Repository
 public class UsuarioRepository implements IUsuarioRepository {
     @Autowired
     DataSource dataSource;
+
+    /**
+     * Metodo que se utiliza para encontrar al cliente
+     * @param id Numero entero que se pide para encontrar al cliente con ese numero
+     * @return devuelve un Usuario con la informacion correspondiente
+     * @throws SQLException Exepcion que se puede producir porque no haya ningun cliente con esa id
+     */
 
     @Override
     public UsuarioOutput getUsuario(int id) throws SQLException {
@@ -28,6 +41,14 @@ public class UsuarioRepository implements IUsuarioRepository {
         }
         return null;
     }
+
+    /**
+     * Metodo que se utiliza para añadir el usuario a la base de datos
+     * @param usuarioInput informacion del usuario que se pide para poder crearlo
+     * @return devuelve la informacion del usuario creado
+     * @throws SQLException expcion que puede ocurrir si los datos entrantes no son correctos
+     * @throws EmailUsedException exepcion que puede ocurrir si ya hay un email y se intenta volver a utilizarse
+     */
 
     @Override
     public UsuarioOutput addUsuario(UsuarioInput usuarioInput) throws SQLException, EmailUsedException {
@@ -56,6 +77,14 @@ public class UsuarioRepository implements IUsuarioRepository {
         return null;
     }
 
+    /**
+     * Metodo que sirve para actualizar la información del usuario
+     * @param usuarioInput informacion del usuario para poder actualizar los campos
+     * @return devuelve una comprobacion que si es true es que se ha podido cambiar la informacion de dicho usuario
+     * @throws SQLException Exepcion que puede ocurrir si la informacion no es correcta
+     * @throws EmailUsedException Exepcion que puede ocurrir si se intenta utilizar el mismo mail en dos usuarios
+     */
+
     @Override
     public boolean updateUsuario(UsuarioInput usuarioInput) throws SQLException, EmailUsedException {
         Usuario usuario = Usuario.fromUsuarioInput(usuarioInput);
@@ -80,6 +109,13 @@ public class UsuarioRepository implements IUsuarioRepository {
         }
     }
 
+    /**
+     * Metodo que sirve para eliminar un usuario a traves de su id
+     * @param id Numero entero que sirve para poder identificar al cliente que queremos eliminar
+     * @return devuelve la informacion del usuario eliminado
+     * @throws SQLException Exepcion que puede ocurrir si intentamos enviar una id de un cliente que no existe
+     */
+
     @Override
     public UsuarioOutput deleteUsuario(int id) throws SQLException {
         String sql = "DELETE FROM Cliente WHERE id_cliente = ?";
@@ -93,6 +129,12 @@ public class UsuarioRepository implements IUsuarioRepository {
             return usuario;
         }
     }
+
+    /**
+     * Metodo que servira para darnos todos los clientes que tenemos en nuestro servidor
+     * @return Devuelve una lista de la informacion correspondiente de cada cliente
+     * @throws SQLException puede dar una exepcion si no hay clientes dados de alta
+     */
 
     @Override
     public List<UsuarioOutput> getAllUsuarios() throws SQLException {
@@ -108,6 +150,13 @@ public class UsuarioRepository implements IUsuarioRepository {
         }
     }
 
+    /**
+     * Metodo que sirve para el login del Cliente
+     * @param email String que pasaremos para comprobar que hay algun cliente dado de alta con ese email
+     * @param contrasenya String que pasaremos para comprobar la contraseña del cliente
+     * @return Devolvera la informacion para que si que pueda entrar en caso de que si este dado de alta
+     * @throws SQLException esta exepcion ocurrira si alguno de los datos pasados no sea correcto
+     */
     @Override
     public UsuarioOutput login(String email, String contrasenya) throws SQLException {
         String sql = "{ call login(?, ?, ?, ?) }";
@@ -126,6 +175,13 @@ public class UsuarioRepository implements IUsuarioRepository {
         }
         return null;
     }
+
+    /**
+     * Metodo que sirve para el Cliente de Android para poder resetear la contraseña en el caso de que el Cliente no se acuerde de ella
+     * @param credenciales las credenciales Es una clase que contiene el email y la contraseña del cliente para que puede resetear la contraseña
+     * @return devuelve un booleano para que se sepa si se ha podido cambiar la contraseña del cliente
+     * @throws SQLException esta exepcion se encia en caso de que intente resetear una cpntraseña con un email que no este dado de alta
+     */
 
     @Override
     public boolean resetPass(Credenciales credenciales) throws SQLException {

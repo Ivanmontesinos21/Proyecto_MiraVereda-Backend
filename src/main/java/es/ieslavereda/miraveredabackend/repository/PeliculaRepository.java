@@ -11,12 +11,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+/**
+ * Repositorio donde se maneja toda la informacion correspondiente a los ContenidoAudioVisuales
+ * @Version 1.0 2024/05/23
+ * @Author David,Ian,Jaime,Ivan
+ */
 
 @Repository
 public class PeliculaRepository implements IPeliculaRepository {
 
     @Autowired
     DataSource dataSource;
+
+    /**
+     * Metodo que se utiliza para obtener una pelicula a traves de una ID
+     * @param id numero que se pasa para poder identificar cual es el ContenidoAudioVisual
+     * @return devuelve la informacion de la pelicula con la id correspondiente
+     * @throws SQLException envia una exepcion en el caso de que el ContenidoAudioVisual no exista
+     */
 
 
     @Override
@@ -36,6 +48,13 @@ public class PeliculaRepository implements IPeliculaRepository {
         }
         return null;
     }
+
+    /**
+     * Metodo para añadir ContenidoAudioVisual a la base de datos
+     * @param pelicula objeto que contiene toda la informacion para poder crear el ContenidoAudioVisual
+     * @return devuelve la informacion correspondiente del ContenidoAudioVisual creado
+     * @throws SQLException envia una exepcion en caso de que no se respete la integridad referencial de la base de datos
+     */
 
     @Override
     public ContenidoAudiovisualOutput addPelicula(ContenidoAudiovisualInput pelicula) throws SQLException {
@@ -86,6 +105,13 @@ public class PeliculaRepository implements IPeliculaRepository {
         }
         return null;
     }
+
+    /**
+     * Metodo que sirve para actualizar un ContenidoAudioVisual
+     * @param pelicula objeto que contiene la informacion del ContenidoAudioVisual que vamos a actualizar
+     * @return devuelve en caso afirmativo que se haya podido actualizar un true
+     * @throws SQLException puede enviar una exepcion si la pelicula no se ha podido actualizar
+     */
     @Override
     public boolean updatePelicula(ContenidoAudiovisualInput pelicula) throws SQLException {
         String sql = "{ ? = call actualizar_pelicula(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) }";
@@ -128,6 +154,13 @@ public class PeliculaRepository implements IPeliculaRepository {
             return st.getBoolean(1);
         }
     }
+
+    /**
+     * Metodo que se utiliza en el caso de que querramos eliminar un ContenidoAudioVisual
+     * @param id Numero que servira para poder identificar el ContenidoAudioVisual
+     * @return devuelve la informacion de la pelicula eliminada
+     * @throws SQLException enviara una exepcion en el caso de que no se pueda eliminar la pelicula
+     */
     @Override
     public ContenidoAudiovisualOutput deletePelicula(int id) throws SQLException {
         String sql = "DELETE FROM CONTENIDO_AUDIOVISUAL WHERE ID_CA = ?";
@@ -141,6 +174,14 @@ public class PeliculaRepository implements IPeliculaRepository {
             return ca;
         }
     }
+
+    /**
+     * Metodo que servira para que obtengamos una lista de todos los ContenidoAudioVisuales qye tengamos
+     * @param afterId identificador que le pondremos a las peliculas para enseñar
+     * @return devuelve una lista de ContenidoAudioVisuales que tenemos disponibles
+     * @throws SQLException enviara una exepcion si no hay ningun ContenidoAudioVisual
+     */
+
     @Override
     public List<ContenidoAudiovisualOutput> getAllPeliculas(Integer afterId) throws SQLException {
         List<ContenidoAudiovisualOutput> peliculas = new ArrayList<>();
@@ -161,6 +202,13 @@ public class PeliculaRepository implements IPeliculaRepository {
         return peliculas;
     }
 
+    /**
+     * Metodo que utilizamos para saber cual es el carrito del usuario
+     * @param credenciales informacion que necesitamos del usuario que es el email y la contraseña
+     * @return devolvera una lista de los ContenidoAudioVisuales que hayamos elegido
+     * @throws SQLException enviara una exepcion en el caso de que no tengamos las credenciales
+     */
+
     @Override
     public List<ContenidoAudiovisualOutput> getCarrito(Credenciales credenciales) throws SQLException {
         List<ContenidoAudiovisualOutput> peliculas = new ArrayList<>();
@@ -179,6 +227,13 @@ public class PeliculaRepository implements IPeliculaRepository {
         return peliculas;
     }
 
+    /**
+     * Metodo que servira para añadir al carrito un ContenidoAudioVisuaL
+     * @param op informacion que necesita la API para poder añadir al carrito
+     * @return devuelve la id del ContenidoAudioVisual para añadirlo al carrito
+     * @throws SQLException enviara una exepcion en el caso de que no quede ningun ContenidoAudioVisual disponible
+     */
+
     @Override
     public int addCarrito(OperacionCarrito op) throws SQLException {
         String sql = "{ ? = call anyadir_carrito(?, ?, ?) }";
@@ -192,6 +247,13 @@ public class PeliculaRepository implements IPeliculaRepository {
             return st.getInt(1);
         }
     }
+
+    /**
+     * Metodo que sirve para eliminar un ContenidoAudioVisual del carrito
+     * @param op Objeto que tiene la informacion correspondiente para poder realizar la operacion de eliminar
+     * @return devuelve la id del ContenidoAudioVisual que quieres eliminar
+     * @throws SQLException enviara una exepcion en el caso de que no se pueda realizar la operacion
+     */
 
     @Override
     public int deleteCarrito(OperacionCarrito op) throws SQLException {

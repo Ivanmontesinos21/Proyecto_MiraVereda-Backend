@@ -6,6 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+/**
+ * Clase del ContenidoAudiovisual que eseñaremos en el caso de que nos pidan informacion
+ * @Version 1.0 2024/05/23
+ * @Author David,Ian,Jaime,Ivan
+ */
+
 
 @Getter
 public class ContenidoAudiovisualOutput {
@@ -29,6 +35,13 @@ public class ContenidoAudiovisualOutput {
     private String serie;
     private Long disponibleDesde;
     Integer temporada;
+
+    /**
+     * Metodo que sirve para de un resultset de actores añadirlos al ContenidoAudioVisual
+     * @param ca ContenidoAudioVisual que enviaremos
+     * @param rsActores resultset de actores que enviaremos para añadirlos al ContenidoAudioVisual
+     * @throws SQLException enviaremos una exepcion si no hemos podido añadirlos
+     */
 
     public ContenidoAudiovisualOutput(ContenidoAudiovisual ca, ResultSet rsActores) throws SQLException {
         id = ca.id;

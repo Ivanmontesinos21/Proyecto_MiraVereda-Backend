@@ -6,6 +6,14 @@ import lombok.Getter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Clase que se utiliza para guardar la informacion de la tarjeta del usuario para poder realizar el pago
+ * @Version 1.0 2024/05/23
+ * @Author David,Ian,Jaime,Ivan
+ */
+
+
+
 @Getter
 @AllArgsConstructor
 public class Tarjeta {

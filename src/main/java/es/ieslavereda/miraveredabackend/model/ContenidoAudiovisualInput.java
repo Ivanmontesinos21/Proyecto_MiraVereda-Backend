@@ -3,6 +3,12 @@ package es.ieslavereda.miraveredabackend.model;
 import lombok.*;
 
 import java.util.Set;
+/**
+ * Clase del ContenidoAudivisual que recibiremos cuando haya que añadirlo a la base de datos
+ * @Version 1.0 2024/05/23
+ * @Author David,Ian,Jaime,Ivan
+ */
+
 
 @Getter
 @Setter

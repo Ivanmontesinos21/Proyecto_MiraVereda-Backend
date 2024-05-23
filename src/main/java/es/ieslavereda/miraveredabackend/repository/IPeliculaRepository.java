@@ -5,6 +5,12 @@ import es.ieslavereda.miraveredabackend.model.*;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Interfaz creada para poder realizar todas las acciones correspondientes con los ContenidosAudioVisuales
+ * @Version 1.0 2024/05/23
+ * @Author David,Ian,Jaime,Ivan
+ */
+
 public interface IPeliculaRepository {
     ContenidoAudiovisualOutput getPelicula(int id) throws SQLException;
     ContenidoAudiovisualOutput addPelicula(ContenidoAudiovisualInput pelicula) throws SQLException;

@@ -5,6 +5,12 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
+/**
+ * Clase de la Conexion a la base de datos
+ * @Version 1.0 2024/05/23
+ * @Author David,Ian,Jaime,Ivan
+ */
+
 
 @Configuration
 public class MyDataSource {
