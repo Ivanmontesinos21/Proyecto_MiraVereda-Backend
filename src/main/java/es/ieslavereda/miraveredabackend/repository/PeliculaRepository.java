@@ -211,15 +211,11 @@ public class PeliculaRepository implements IPeliculaRepository {
     public int pagar(Credenciales credenciales) throws SQLException {
         String sql = "{ ? = call pagar(?, ?) }";
         try(Connection connection = dataSource.getConnection()) {
-            System.out.println(1);
             CallableStatement st = connection.prepareCall(sql);
-            System.out.println(2);
             st.setString(2, credenciales.getEmail());
             st.setString(3, credenciales.getContrasenya());
             st.registerOutParameter(1, Types.INTEGER);
-            System.out.println(3);
             st.execute();
-            System.out.println(4);
             return st.getInt(1);
         }
     }
