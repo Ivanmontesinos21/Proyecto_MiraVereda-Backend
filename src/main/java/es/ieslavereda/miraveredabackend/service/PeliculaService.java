@@ -91,7 +91,7 @@ public class PeliculaService {
      * @throws SQLException enviará una exepcion en el caso de que se pierda la informacion del usuario
      */
 
-    public int addCarrito(OperacionCarrito op) throws SQLException {
+    public int addCarrito(OperacionUsuarioPelicula op) throws SQLException {
         return repository.addCarrito(op);
     }
 
@@ -102,7 +102,7 @@ public class PeliculaService {
      * @throws SQLException enviará la exepcion si no se ha podido eliminar del carro el ContenidoAudiovisual
      */
 
-    public int deleteCarrito(OperacionCarrito op) throws SQLException {
+    public int deleteCarrito(OperacionUsuarioPelicula op) throws SQLException {
         return repository.deleteCarrito(op);
     }
 
@@ -112,5 +112,9 @@ public class PeliculaService {
 
     public void addActor(Actor actor) throws SQLException {
         repository.addActor(actor);
+    }
+
+    public boolean estaAlquilada(OperacionUsuarioPelicula op) throws SQLException {
+        return repository.estaAlquilada(op);
     }
 }

@@ -1,0 +1,21 @@
+CREATE OR REPLACE FUNCTION esta_alquilada (email_input VARCHAR2, password_input VARCHAR2, id_input INTEGER) RETURN BOOLEAN
+IS
+BEGIN 
+	DECLARE 
+		alquilada_count INTEGER;
+	BEGIN
+		SELECT COUNT(*) INTO alquilada_count
+			FROM ALQUILA a JOIN CLIENTE c
+			ON a.ID_CLIENTE = c.ID_CLIENTE 
+			WHERE c.EMAIL = email_input AND
+				c.CONTRASENYA = password_input AND
+				a.ID_CONTEAUDIOVI = id_input AND
+				a.COBRADO = 1 AND
+				(a.DISPONIBLE_HASTA IS NULL OR (SELECT CURRENT_DATE FROM DUAL) < a.DISPONIBLE_HASTA);
+		IF alquilada_count = 0 THEN
+			RETURN FALSE;
+		ELSE
+			RETURN TRUE;
+		END IF;
+	END;
+END;

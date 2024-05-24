@@ -235,7 +235,7 @@ public class PeliculaRepository implements IPeliculaRepository {
      */
 
     @Override
-    public int addCarrito(OperacionCarrito op) throws SQLException {
+    public int addCarrito(OperacionUsuarioPelicula op) throws SQLException {
         String sql = "{ ? = call anyadir_carrito(?, ?, ?) }";
         try(Connection connection = dataSource.getConnection()) {
             CallableStatement st = connection.prepareCall(sql);
@@ -256,7 +256,7 @@ public class PeliculaRepository implements IPeliculaRepository {
      */
 
     @Override
-    public int deleteCarrito(OperacionCarrito op) throws SQLException {
+    public int deleteCarrito(OperacionUsuarioPelicula op) throws SQLException {
         String sql = "{ ? = call quitar_carrito(?, ?, ?) }";
         try(Connection connection = dataSource.getConnection()) {
             CallableStatement st = connection.prepareCall(sql);
@@ -291,6 +291,20 @@ public class PeliculaRepository implements IPeliculaRepository {
             st.setString(2, actor.getNombre());
             st.setString(3, actor.getApellidos());
             st.execute();
+        }
+    }
+
+    @Override
+    public boolean estaAlquilada(OperacionUsuarioPelicula op) throws SQLException {
+        String sql = "{ ? = call esta_alquilada(?, ?, ?) }";
+        try(Connection connection = dataSource.getConnection()) {
+            CallableStatement st = connection.prepareCall(sql);
+            st.setString(2, op.getEmail());
+            st.setString(3, op.getContrasenya());
+            st.setInt(4, op.getIdPelicula());
+            st.registerOutParameter(1, Types.BOOLEAN);
+            st.execute();
+            return st.getBoolean(1);
         }
     }
 }

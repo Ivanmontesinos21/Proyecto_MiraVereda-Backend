@@ -18,8 +18,9 @@ public interface IPeliculaRepository {
     ContenidoAudiovisualOutput deletePelicula(int id) throws SQLException;
     List<ContenidoAudiovisualOutput> getAllPeliculas(Integer afterId) throws SQLException;
     List<ContenidoAudiovisualOutput> getCarrito(Credenciales credenciales) throws SQLException;
-    int addCarrito(OperacionCarrito op) throws SQLException;
-    int deleteCarrito(OperacionCarrito op) throws SQLException;
+    int addCarrito(OperacionUsuarioPelicula op) throws SQLException;
+    int deleteCarrito(OperacionUsuarioPelicula op) throws SQLException;
     int pagar(Credenciales credenciales) throws SQLException;
     void addActor(Actor actor) throws SQLException;
+    boolean estaAlquilada(OperacionUsuarioPelicula op) throws SQLException;
 }
