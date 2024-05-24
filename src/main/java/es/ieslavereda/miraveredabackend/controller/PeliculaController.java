@@ -11,6 +11,12 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Controlador de las Peliculas
+ * @Version 1.0 2024/05/23
+ * @Author David,Ian,Jaime,Ivan
+ */
+
 @RestController
 @RequestMapping("/api")
 public class PeliculaController extends BaseController {
@@ -18,6 +24,13 @@ public class PeliculaController extends BaseController {
     private PeliculaService service;
     @Autowired
     private PeliculaService peliculaService;
+
+    /**
+     * Obtiene un ContenidoAudiovisual por su ID.
+     *
+     * @param id el ID del ContenidoAudiovisual
+     * @return el ContenidoAudiovisual  encontrado o un mensaje de error si no se encuentra
+     */
 
     @CrossOrigin(origins = "*")
     @GetMapping("/pelicula/{id}")
@@ -35,6 +48,13 @@ public class PeliculaController extends BaseController {
         }
     }
 
+    /**
+     * Añade un nuevo ContenidoAudiovisual.
+     *
+     * @param pelicula el ContenidoAudiovisual a añadir
+     * @return el ContenidoAudiovisual añadido o un mensaje de error si ocurre un problema
+     */
+
     @CrossOrigin(origins = "*")
     @PostMapping("/pelicula/")
     public ResponseEntity<?> addPelicula(@RequestBody ContenidoAudiovisualInput pelicula) {
@@ -48,6 +68,12 @@ public class PeliculaController extends BaseController {
             }
 
     }
+    /**
+     * Actualiza el ContenidoAudiovisual existente.
+     *
+     * @param pelicula el ContenidoAudiovisual a actualizar
+     * @return un mensaje de éxito o error según corresponda
+     */
 
     @CrossOrigin(origins = "*")
     @PutMapping("/pelicula/")
@@ -65,6 +91,13 @@ public class PeliculaController extends BaseController {
         }
     }
 
+    /**
+     * Elimina el ContenidoAudiovisual por su ID.
+     *
+     * @param id el ID del ContenidoAudiovisual
+     * @return el ContenidoAudiovisual eliminado o un mensaje de error si no se encuentra
+     */
+
     @CrossOrigin(origins = "*")
     @DeleteMapping("/pelicula/{id}")
     public ResponseEntity<?> deletePelicula(@PathVariable("id") int id) {
@@ -81,6 +114,13 @@ public class PeliculaController extends BaseController {
         }
     }
 
+    /**
+     * Obtiene todos los  ContenidosAudiovisuales.
+     *
+     * @param afterId ID del ContenidoAudiovisual a partir de la cual obtener las siguientes películas
+     * @return la lista de los  ContenidoAudiovisual
+     */
+
     @CrossOrigin(origins = "*")
     @GetMapping("/pelicula/")
     public ResponseEntity<?> getAllPeliculas(@RequestParam(value = "after", required = false) Integer afterId) {
@@ -93,6 +133,13 @@ public class PeliculaController extends BaseController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     * Obtiene el carrito de compras de un usuario.
+     *
+     * @param credenciales las credenciales del usuario
+     * @return el carrito de compras del usuario
+     */
 
     @CrossOrigin(origins = "*")
     @PostMapping("/carrito/ver/")
@@ -107,6 +154,13 @@ public class PeliculaController extends BaseController {
         }
     }
 
+    /**
+     * Añade una película al carrito de compras.
+     *
+     * @param op la operación de usuario y película
+     * @return la operación realizada
+     */
+
     @CrossOrigin(origins = "*")
     @PostMapping("/carrito/")
     public ResponseEntity<?> addCarrito(@RequestBody OperacionUsuarioPelicula op) {
@@ -119,6 +173,12 @@ public class PeliculaController extends BaseController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    /**
+     * Elimina una película del carrito de compras.
+     *
+     * @param op la operación de usuario y película
+     * @return la operación realizada
+     */
 
     @CrossOrigin(origins = "*")
     @DeleteMapping("/carrito/")
@@ -133,6 +193,13 @@ public class PeliculaController extends BaseController {
         }
     }
 
+    /**
+     * Realiza el pago del carrito de compras.
+     *
+     * @param credenciales las credenciales del usuario
+     * @return la operación de pago realizada
+     */
+
     @CrossOrigin(origins = "*")
     @PostMapping("/pagar/")
     public ResponseEntity<?> pagar(@RequestBody Credenciales credenciales) {
@@ -145,6 +212,12 @@ public class PeliculaController extends BaseController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    /**
+     * Añade un nuevo actor.
+     *
+     * @param actor el actor a añadir
+     * @return un mensaje de éxito o de error
+     */
 
     @CrossOrigin(origins = "*")
     @PostMapping("/actor/")
@@ -159,6 +232,14 @@ public class PeliculaController extends BaseController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     * Verifica si una película está alquilada.
+     *
+     * @param op la operación de usuario y película
+     * @return verdadero si la película está alquilada, falso en caso contrario
+     */
+
 
     @CrossOrigin(origins = "*")
     @PostMapping("/pelicula/alquilada/")

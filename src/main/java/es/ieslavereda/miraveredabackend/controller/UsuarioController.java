@@ -12,11 +12,24 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Controlador del Cliente
+ * @Version 1.0 2024/05/23
+ * @Author David,Ian,Jaime,Ivan
+ */
+
 @RestController
 @RequestMapping("/api")
 public class UsuarioController {
     @Autowired
     private UsuarioService service;
+
+    /**
+     * Obtiene un cliente por su ID.
+     *
+     * @param id el ID del cliente
+     * @return el cliente encontrado o un mensaje de error si no se encuentra
+     */
 
     @CrossOrigin(origins = "*")
     @GetMapping("/usuario/{id}")
@@ -33,6 +46,12 @@ public class UsuarioController {
             return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    /**
+     * Añade un nuevo cliente.
+     *
+     * @param usuarioInput la información del cliente a añadir
+     * @return el cliente añadido o un mensaje de error si ocurre cualquier tipo un problema
+     */
 
     @CrossOrigin(origins = "*")
     @PostMapping("/usuario/")
@@ -55,6 +74,12 @@ public class UsuarioController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    /**
+     * Actualiza un cliente existente.
+     *
+     * @param usuarioInput  la información del cliente a actualizar
+     * @return un mensaje de éxito o error según corresponda
+     */
 
     @CrossOrigin(origins = "*")
     @PutMapping("/usuario/")
@@ -78,6 +103,13 @@ public class UsuarioController {
         }
     }
 
+    /**
+     * Elimina un cliente por su ID.
+     *
+     * @param id el ID del cliente
+     * @return el cliente eliminado o un mensaje de error si no se encuentra
+     */
+
     @CrossOrigin(origins = "*")
     @DeleteMapping("/usuario/{id}")
     public ResponseEntity<?> deleteUsuario(@PathVariable int id) {
@@ -93,6 +125,11 @@ public class UsuarioController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    /**
+     * Obtiene todos los clientes.
+     *
+     * @return la lista de clientes
+     */
 
     @CrossOrigin(origins = "*")
     @GetMapping("/usuario/")
@@ -106,6 +143,12 @@ public class UsuarioController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    /**
+     * Autentica a un cliente.
+     *
+     * @param credenciales las credenciales del cliente
+     * @return la información del cliente autenticado o un mensaje de error si no se encuentra
+     */
 
     @CrossOrigin(origins = "*")
     @PostMapping("/login/")
@@ -123,6 +166,12 @@ public class UsuarioController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    /**
+     * Restablece la contraseña de un cliente.
+     *
+     * @param credenciales las credenciales del cliente
+     * @return un mensaje de éxito o error según corresponda
+     */
 
     @CrossOrigin(origins = "*")
     @PutMapping("/resetpass/")
